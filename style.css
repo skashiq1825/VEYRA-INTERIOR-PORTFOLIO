@@ -64,7 +64,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1vw;
+    padding: 2vw;
     font-family: montserrat;
 
 }
@@ -467,7 +467,7 @@ body {
 #note {
     width: 13vw;
     height: 6vh;
-
+    /* background-color: rebeccapurple; */
     position: absolute;
     top: 26%;
     left: 56%;
@@ -1217,7 +1217,7 @@ body {
         background-color: bisque;
         position: absolute;
         top: 0%;
-        left: 30%;
+        left: 37%;
 
     }
 
@@ -1226,7 +1226,7 @@ body {
         height: 40vw;
         background-color: bisque;
         position: absolute;
-        top: 55vw;
+        top: 70vw;
         right: 1%;
 
     }
@@ -1240,8 +1240,9 @@ body {
         left: 2%;
     }
     #note{
-        width: 22vw;
-        height: 13vh;
+        width: 30vw;
+        height: 9vh;
+        top: 25%;
     }
     #ntxt {
     
@@ -1249,12 +1250,12 @@ body {
     font-size: 4.2vw;
     display: inline-block;
     position: absolute;
-    left: 14%;
-    top: 40%;
+    left: 15%;
+    top: 42%;
 }
 
 #ntxt h1 {
-    font-weight: 500;
+    font-weight: 450;
     letter-spacing: 0px;
     color: #3C3C3C;
 }
@@ -1265,8 +1266,8 @@ body {
     /* background-color: red; */
    
     position: absolute;
-    left: 18%;
-    top: 47%;
+    left: 14%;
+    top: 48%;
     color: #3C3C3C;
 
 }
