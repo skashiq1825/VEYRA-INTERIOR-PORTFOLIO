@@ -1250,12 +1250,12 @@ body {
     font-size: 4.2vw;
     display: inline-block;
     position: absolute;
-    left: 15%;
-    top: 42%;
+    left: 11%;
+    top: 43%;
 }
 
 #ntxt h1 {
-    font-weight: 450;
+    font-weight: 400;
     letter-spacing: 0px;
     color: #3C3C3C;
 }
@@ -1266,11 +1266,42 @@ body {
     /* background-color: red; */
    
     position: absolute;
-    left: 14%;
+    left: 11%;
     top: 48%;
     color: #3C3C3C;
 
 }
-
+#tcr{
+    width: 20.5vw;
+    height: 20.5vw;
+    background-color: #EAEAEA;
+    border-radius: 50%;
+    left: 70%;
+    top: 100vw;
+}
+#tc{
+    width: 20.5vw;
+    height: 20.5vw;
+    background-color: #EAEAEA;
+    border-radius: 50%;
+    left: 70%;
+    top: 100vw;
+}
+#thcr{
+    width: 20.5vw;
+    height: 20.5vw;
+    background-color: #EAEAEA;
+    border-radius: 50%;
+    left: 47%;
+    top: 80%;
+}
+#thc{
+    width: 20.5vw;
+    height: 20.5vw;
+    background-color: #EAEAEA;
+    border-radius: 50%;
+    left: 47%;
+    top: 80%;
+}
 
 }
