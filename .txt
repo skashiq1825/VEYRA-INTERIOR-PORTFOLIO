@@ -1,0 +1,2441 @@
+balance , cozy , luxarious   rgb(231, 192, 192)
+
+
+
+
+1528 732  edge
+
+
+1536 730
+
+
+
+
+btn oc =>  hover > one = ./-Secondary\ bedroom-20250531-3.jpg.jpeg
+btn oc =>  hover > two = ./fr.jpg  
+btn oc =>  hover > three = ./Unnamed-20250828-131658.jpg.jpeg
+
+
+btn thc => hover > one =
+btn thc => hover > two =
+btn thc => hover > three =
+
+
+
+
+/* Common class ya IDs par apply karein */
+#one, #two, #three {
+    position: absolute;
+    overflow: hidden;
+    /* GSAP Variables */
+    --blur-after: 0px;
+    --blur-before: 20px;
+    --opacity-before: 0;
+}
+
+#one::after, #one::before,
+#two::after, #two::before,
+#three::after, #three::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-position: center;
+    background-size: cover;
+}
+
+/* --- Base Images (Jo pehle se dikh rahi hain) --- */
+#one::after { 
+    background-image: url(./1756920966387.jpeg.jpg.jpeg); 
+    filter: blur(var(--blur-after)); 
+    z-index: 1;
+}
+#two::after { 
+    background-image: url(./prlr\ 1.jpeg); 
+    filter: blur(var(--blur-after)); 
+    z-index: 1;
+}
+#three::after { 
+    background-image: url(./proj.jpeg); 
+    filter: blur(var(--blur-after)); 
+    z-index: 1;
+}
+
+/* --- Hover Reveal Images (Jo hover par ayengi) --- */
+/* Yahan apni nayi images ke paths daal dena */
+#one::before { 
+    background-image: url(./-Secondary\ bedroom-20250531-3.jpg.jpeg); 
+    opacity: var(--opacity-before); 
+    filter: blur(var(--blur-before)); 
+    z-index: 2;
+}
+#two::before { 
+    background-image: url(./fr.jpg); 
+    opacity: var(--opacity-before); 
+    filter: blur(var(--blur-before)); 
+    z-index: 2;
+}
+#three::before { 
+    background-image: url(./Unnamed-20250828-131658.jpg.jpeg); 
+    opacity: var(--opacity-before); 
+    filter: blur(var(--blur-before)); 
+    z-index: 2;
+}
+
+
+
+jssss
+
+
+
+const trigger = document.querySelector("#oc"); 
+const targets = document.querySelectorAll("#one, #two, #three"); 
+
+function syncReveal(isEnter) {
+    // 1. Purane sabhi animations ko turant band karo
+    gsap.killTweensOf(targets);
+
+    // 2. Teeno ko ek saath (no stagger) animate karo
+    gsap.to(targets, {
+        "--opacity-before": isEnter ? 1 : 0,
+        "--blur-after": isEnter ? "6px" : "0px",
+        "--blur-before": isEnter ? "0px" : "6px",
+        duration: 0.7, // Ek hi duration sabke liye
+        // ease: "power2.out",
+        overwrite: true // Clash se bachne ke liye
+    });
+}
+C:\Windows\cloudflared.exe tunnel --url
+// Hover Events
+trigger.addEventListener("mouseenter", () => syncReveal(true));
+trigger.addEventListener("mouseleave", () => syncReveal(false));
+
+
+
+
+gsap.to("#ocr", {
+    top: "218vh",
+    left: "50%",
+    xPercent: -50,
+    ease: "none",
+    immediateRender: false,
+    scrollTrigger: {
+        trigger: "#poster",
+        start: "top 26%",
+        scroller: "#main",
+        end: "bottom top", // Yeh point yaad rakhein
+        scrub: 1,
+    }
+});
+
+// 2. Magic Swap: Jahan #ocr gayab hoga aur #gola dikhega
+// Iska start point #ocr ke end point ke barabar hona chahiye
+var magic = gsap.timeline({
+    scrollTrigger: {
+        trigger: "#poster",
+        scroller: "#main",
+        start: "bottom top", // Exactly jahan pehla animation khatam hua
+        end: "+=10", // Turant swap karne ke liye
+        scrub: true
+    }
+});
+
+magic.to("#ocr", { opacity: 0, duration: 0.1 })
+     .to("#gola", { opacity: 1, duration: 0.1 }, "<");
+
+// 3. #gola Pinning: Bina kisi jump ke
+gsap.to("#gola", {
+    scrollTrigger: {
+        trigger: "#poster", // Poster ke bottom se hi pinning start karein
+        scroller: "#main",
+        start: "bottom top", // Same starting point as magic swap
+        endTrigger: "#sym1", // Jahan tak le jana hai
+        end: "top -400%",
+        pin: "#gola",
+        pinSpacing: false,
+        scrub: true,
+        invalidateOnRefresh: true
+    }
+});
+
+
+
+ 
+http://127.0.0.1:5500/
+http://127.0.0.1:5500 --protocol http2
+
+/////////js//////
+gsap.registerPlugin(ScrollTrigger);
+
+// Using Locomotive Scroll from Locomotive https://github.com/locomotivemtl/locomotive-scroll
+
+const locoScroll = new LocomotiveScroll({
+    el: document.querySelector("#main"),
+    smooth: true,
+    lerp: 0.07,
+    multiplier: 0.2,
+    firefoxMultiplier: 50,
+});
+// each time Locomotive Scroll updates, tell ScrollTrigger to update too (sync positioning)
+locoScroll.on("scroll", ScrollTrigger.update);
+
+// tell ScrollTrigger to use these proxy methods for the "#main" element since Locomotive Scroll is hijacking things
+ScrollTrigger.scrollerProxy("#main", {
+    scrollTop(value) {
+        return arguments.length ? locoScroll.scrollTo(value, 0, 0) : locoScroll.scroll.instance.scroll.y;
+    }, // we don't have to define a scrollLeft because we're only scrolling vertically.
+    getBoundingClientRect() {
+        return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+    },
+    // LocomotiveScroll handles things completely differently on mobile devices - it doesn't even transform the container at all! So to get the correct behavior and avoid jitters, we should pin things with position: fixed on mobile. We sense it by checking to see if there's a transform applied to the container (the LocomotiveScroll-controlled element).
+    pinType: document.querySelector("#main").style.transform ? "transform" : "fixed"
+});
+
+
+
+
+
+
+// each time the window updates, we should refresh ScrollTrigger and then update LocomotiveScroll. 
+ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
+
+// after everything is set up, refresh() ScrollTrigger and update LocomotiveScroll because padding may have been added for pinning, etc.
+ScrollTrigger.refresh();
+
+
+var oc = document.querySelector("#oc");
+var thc = document.querySelector("#thc");
+oc.addEventListener("mouseover", function () {
+    var tl = gsap.timeline();
+    tl
+        .to("#page1", {
+            backgroundColor: "transparent",
+            duration: .3
+
+
+        })
+        .to("#page1j", {
+            opacity: 1,
+            duration: .3
+
+
+        })
+        .to("#oc", {
+            scale: 1.2,
+            delay: -.5
+        })
+    // .to("#onej",{
+    //     opacity:1,
+    //     duration:.5,
+
+
+    // })  
+    // // .to("#one",{
+    // //     opacity:1,
+    // //     duration:.5,
+
+    // // })
+
+    //   .to("#twoj",{
+    //     opacity:1,
+    //     duration:.5,
+    //     delay:-1
+
+    // })
+
+    //   .to("#threej",{
+    //     opacity:1,
+    //     duration:.5,
+    //     delay:-1
+
+    // })
+})
+
+oc.addEventListener("mouseleave", function () {
+    var tl = gsap.timeline();
+    tl
+        .to("#page1", {
+            backgroundColor: "transparent",
+            duration: .3
+
+
+        })
+        .to("#page1j", {
+            opacity: 0,
+            duration: .3
+
+
+        })
+        .to("#oc", {
+            scale: 1,
+            delay: -.5
+        })
+    //    .to("#onej",{
+    //     opacity:0,
+    //     duration:.2,
+    //     delay:-.5
+
+
+    // })  
+    // .to("#one",{
+    //     opacity:1,
+    //     duration:.1,
+
+    // })
+
+    //   .to("#twoj",{
+    //     opacity:0,
+    //     duration:.4,
+    //     delay:-.5
+
+    // })
+
+    //   .to("#threej",{
+    //     opacity:0,
+    //     duration:.2,
+    //     delay:-.5
+
+    // })
+
+})
+
+
+thc.addEventListener("mouseover", function () {
+    var tl = gsap.timeline();
+    tl
+        .to("#page1", {
+            backgroundColor: "transparent",
+            duration: .3
+
+
+        })
+        .to("#page1m", {
+            opacity: 1,
+            duration: .3
+
+
+        })
+        .to("#thc", {
+            scale: 1.2,
+            delay: -.5
+        })
+})
+
+thc.addEventListener("mouseleave", function () {
+    var tl = gsap.timeline();
+    tl
+        .to("#page1", {
+            backgroundColor: "transparent",
+            duration: .3
+
+
+        })
+        .to("#page1m", {
+            opacity: 0,
+            duration: .3
+
+
+        })
+        .to("#thc", {
+            scale: 1,
+            delay: -.5
+        })
+})
+
+
+gsap.to("#main", {
+    backgroundColor: "#F5EFE1",
+    scrollTrigger: {
+        trigger: "#three",
+
+        // markers:true,
+        scroller: "#main",
+        start: "top 17%",
+        scrub: 3,
+        onLeaveBack: () => {
+            gsap.to("#main", { backgroundColor: "#f6f6f6", duration: 0.3 });
+        }
+
+    }
+
+})
+
+var cl = gsap.timeline({
+    scrollTrigger: {
+        trigger: "#three",
+        scroller: "#main",
+        scrub: 1,
+        // markers:true,
+        start: "top 50%",
+
+
+
+    }
+});
+
+
+cl.to("#ocr", {
+    top: "130%",
+    left: "35%",
+    scale: 3.9,
+    zIndex: 3
+});
+
+cl.to("#tcr", {
+    top: "130%",
+    left: "33%",
+    scale: 2.7
+
+}, "<")
+cl.to("#thcr", {
+    top: "130%",
+    left: "33%",
+    scale: 2
+
+}, "<")
+
+cl.to("#ocr", {
+    top:"148%",
+      left: "50%",
+    xPercent: -50,
+   
+});
+
+
+
+var ol = gsap.timeline({
+    scrollTrigger: {
+        trigger: "#ntxt",
+        scroller: "#main",
+        // markers:true,
+        start: "top 27%",
+        scrub: 1,
+        end: "top 25%",
+
+    }
+});
+
+ol.to("#oc", {
+    opacity: 0,
+    zIndex: -2
+
+})
+ol.to("#tc", {
+    opacity: 0,
+    zIndex: -2
+
+
+}, "<")
+ol.to("#thc", {
+    opacity: 0,
+    zIndex: -2
+
+
+}, "<")
+
+var pl = gsap.timeline({
+    scrollTrigger: {
+        trigger: "#poster",
+        // markers:true,
+        scroller: "#main",
+        start: "top 80%",
+
+        scrub: 1
+    }
+});
+
+pl.to("#poster", {
+    scale: 1.2
+})
+
+pl.to("#post", {
+    scale: 1,
+    marginTop: "52vh"
+}, "< 0.3")
+
+
+
+
+var ok = gsap.timeline({
+    scrollTrigger: {
+        scroller: "#main",
+        trigger: "#poster",
+        start: "top 75%",
+        markers:true,
+        end: "top 70%",
+        scrub: true
+    }
+});
+
+
+ok.to("#thcr", {
+    opacity: 0
+})
+ok.to("#tcr", {
+    opacity: 0
+},"<")
+
+
+// gsap.to("#ocr",
+//   {
+//     top: "253%",   // ⭐ yahin se start force kar diya
+//     left: "50%",
+//     xPercent: -50,
+//     ease:"none",
+//    immediateRender: false,
+//     scrollTrigger: {
+//       trigger: "#poster",
+//       start: "top 26%",
+//       scroller:"#main",
+//       end: "bottom top",
+//       scrub: 1,
+//     //   markers: true,
+
+
+//     }
+//   }
+// );
+
+gsap.to("#capt", {
+    right: "-10%",
+    scrollTrigger: {
+        scroller: "#main",
+        trigger: "#poster",
+        // markers:true,
+        start: "top 75%",
+        scrub: 3
+    }
+})
+
+var i = gsap.timeline({
+    scrollTrigger: {
+        trigger: "#sym",
+        scroller: "#main",
+        // markers:true,
+        start: "top 30%",
+        scrub: 3,
+        // onLeaveBack: () => {
+        //     // Force reset to previous section color or default
+        //     gsap.to("#main", { backgroundColor: "#F5EFE1", duration: 0.3 });
+        // }
+    }
+});
+i.to("#front", {
+    backgroundColor: "#EBF4EA",
+})
+i.to("#main", {
+    backgroundColor: "#EBF4EA"
+}, "<")
+
+
+
+
+locoScroll.on("scroll", (instance) => {
+    if (instance.scroll.y < 100) {
+        gsap.to("#main", { backgroundColor: "#f6f6f6", duration: 0.3, overwrite: "auto" });
+    }
+});
+
+
+
+gsap.to("#sym", {
+    left: "-50%",
+    scrollTrigger: {
+        trigger: "#sym",
+        scroller: "#main",
+        scrub: 4,
+        start: "top 88%",
+        // markers:true
+
+
+    }
+})
+
+console.log(window.innerWidth, window.innerHeight);
+
+gsap.to("#gola", {
+    backgroundColor: "#E5EEE4",
+    scrollTrigger: {
+        trigger: "#sym",
+        scroller: "#main",
+        scrub: 5,
+        // markers:true,
+        start: "top 9%"
+
+    }
+})
+
+
+// yoyoyoyoyo
+
+
+
+const targets = document.querySelectorAll("#one, #two, #three");
+const btnOC = document.querySelector("#oc");
+const btnTHC = document.querySelector("#thc");
+
+// --- Data: Kaunse button ke liye kaunsi images ---
+const imagesOC = [
+    'boho.png',
+    'boxroom (1).png',
+    'kids room front.png'
+];
+
+const imagesTHC = [
+    '-Secondary bedroom-20250531-3.jpg.jpeg',
+    'fr.jpg',
+    'boxroom (2).png'
+];
+
+// --- Common Animation Function ---
+function triggerReveal(isEnter, imageList = []) {
+    gsap.killTweensOf(targets);
+
+    if (isEnter) {
+        // Hover Enter: Pehle teeno divs ki background-image badlo
+        targets.forEach((div, index) => {
+            // CSS Variable ke bajaye hum directly style.backgroundImage badal rahe hain
+            div.style.setProperty('--reveal-img', `url('${imageList[index]}')`);
+
+            // Ab CSS mein ::before ko batana padega ki wo ye variable use kare (Niche CSS check karein)
+        });
+
+        // Ab GSAP se animate karo
+        gsap.to(targets, {
+            "--opacity-before": 1,
+            "--blur-after": "10px",
+            "--blur-before": "0px",
+            duration: 0.7,
+            // ease: "power2.out",
+            overwrite: true
+        });
+    } else {
+        // Hover Leave
+        gsap.to(targets, {
+            "--opacity-before": 0,
+            "--blur-after": "0px",
+            "--blur-before": "20px",
+            duration: 0.5,
+            // ease: "power2.inOut",
+            overwrite: true
+        });
+    }
+}
+
+// --- Event Listeners ---
+
+// Button #oc ke liye
+btnOC.addEventListener("mouseenter", () => triggerReveal(true, imagesOC));
+btnOC.addEventListener("mouseleave", () => triggerReveal(false));
+
+// Button #thc ke liye
+btnTHC.addEventListener("mouseenter", () => triggerReveal(true, imagesTHC));
+btnTHC.addEventListener("mouseleave", () => triggerReveal(false));
+
+
+
+
+
+// 1. #ocr ko niche le kar aane wala animation
+gsap.to("#ocr", {
+    top: "219.5vh",
+    left: "50%",
+    xPercent: -50,
+    ease: "none",
+    immediateRender: false,
+    scrollTrigger: {
+        trigger: "#poster",
+        start: "top 26%",
+        scroller: "#main",
+        end: "bottom top", // Yeh point yaad rakhein
+        scrub: 1,
+    }
+});
+
+// 2. Magic Swap: Jahan #ocr gayab hoga aur #gola dikhega
+// Iska start point #ocr ke end point ke barabar hona chahiye
+var magic = gsap.timeline({
+    scrollTrigger: {
+        trigger: "#poster",
+        scroller: "#main",
+        start: "bottom top", // Exactly jahan pehla animation khatam hua
+        end: "+=10", // Turant swap karne ke liye
+        scrub: true
+    }
+});
+
+magic.to("#ocr", { opacity: 0, duration: 0.1})
+    .to("#gola", { opacity: 1, duration: 0.1 }, "<");
+
+// 3. #gola Pinning: Bina kisi jump ke
+gsap.to("#gola", {
+    yPercent: 20,
+    scrollTrigger: {
+        trigger: "#poster", // Poster ke bottom se hi pinning start karein
+        scroller: "#main",
+        start: "bottom top", // Same starting point as magic swap
+        endTrigger: "#sym1", // Jahan tak le jana hai
+        end: "top -255%",
+        pin: "#gola",
+        pinSpacing: false,
+        scrub: true,
+        invalidateOnRefresh: true
+    }
+});
+
+var ek = gsap.timeline({
+    scrollTrigger: {
+        trigger: ".frame",
+        scroller: "#main",
+        start: "top 41%",
+        end: "top 38%",
+        scrub: 1
+    }
+});
+
+// Force zIndex and Position before animation starts
+gsap.set(["#p", "#roj", "#ect", "#s"], { position: "relative", zIndex: 11 });
+
+ek.from(["#p", "#roj", "#ect", "#s"], {
+    opacity: 0,
+    y: 10,
+    // ease: "power2.out"
+});
+
+
+// var reveal = gsap.timeline({
+//      scrollTrigger: {
+//         trigger: ".frame2", // Poster ke bottom se hi pinning start karein
+//         scroller: "#main",
+//         start: "top 80%", // Same starting point as magic swap
+//         // endTrigger: "#sym1", // Jahan tak le jana hai
+//         end: "top -218%",
+//         pinSpacing: false,
+//         scrub: true,
+//         invalidateOnRefresh: true,
+//         markers:true
+//     }
+// });
+
+// reveal.to("#p",{
+//         pin: "#p",
+
+// })
+
+
+// gsap.to("#p", {
+
+//     scrollTrigger: {
+//         trigger: ".frame2", // Poster ke bottom se hi pinning start karein
+//         scroller: "#main",
+//         start: "top 80%", // Same starting point as magic swap
+//         // endTrigger: "#sym1", // Jahan tak le jana hai
+//         end: "top -218%",
+//         pin: "#p",
+//         pinSpacing: false,
+//         scrub: true,
+//         invalidateOnRefresh: true,
+//         markers:true
+//     }
+// });
+
+const elements = ["#p", "#roj", "#ect", "#s"];
+
+elements.forEach((el) => {
+    gsap.to(el, {
+        scrollTrigger: {
+            trigger: ".frame2",
+            scroller: "#main",
+            start: "top 80%",
+            end: "top -186%",
+            pin: el, // Har element individually pin hoga
+            pinSpacing: false,
+            scrub: true,
+            invalidateOnRefresh: true,
+            // markers: true
+        }
+    });
+});
+
+// 1. PINNING: Yeh sirf elements ko wahi rok ke rakhega
+
+// // 2. ANIMATION (Left/Right/Top): Yeh wahi arrangement karega jo tune bola
+let goo = gsap.timeline({
+    scrollTrigger: {
+        trigger: ".frame2",
+        scroller: "#main",
+        start: "top 75%",    // Same start point
+        end: "top -183%",    // Same end point
+        scrub: 3,            // "1" dene se thoda smooth animation aayega (premium feel)
+
+    }
+});
+
+goo.to("#p", {
+    // Left move
+    top: "23vh",
+    left: "21.5vw"              // #ect ke level par laane ke liye (apne hisab se value set kar lo)
+
+}, "<")
+    .to("#roj", {
+        // Right move
+        top: "22vh",
+        left: "6.2vw"             // Same top value as #ect
+
+    }, "<")
+   .to("#s", {
+    top: "22vh",
+    right: "20vw",
+    left: "initial", 
+    
+}, "<")
+
+
+var boom = gsap.timeline({
+    scrollTrigger:{
+        trigger:".frame5",
+        scroller:"#main",
+        // markers:true,
+        start:"top 20%",
+        // end: "top 0%",
+         preventOverlaps: true,
+        //   fastScrollEnd: true,
+        scrub:true,
+        
+    }
+});
+boom.to("#gola",{
+    scale:0.5,
+    top:"92vh",
+    //  overwrite: "auto",  
+    //   immediateRender: false,
+    backgroundColor:"#B8C7B3"
+    
+})
+boom.to("#p h1",{
+    color:"#3c3c3c"
+    
+},"<")
+boom.to("#roj h1",{
+    color:"#3c3c3c"
+    
+},"<")
+boom.to("#ect h1",{
+    color:"#3c3c3c"
+    
+},"<")
+boom.to("#s h1",{
+    color:"#3c3c3c"
+    
+},"<")
+
+
+// GSAP Timeline setup with ScrollTrigger
+// var boom = gsap.timeline({
+//     scrollTrigger: {
+//         trigger: ".frame5",
+//         scroller: "#main",
+//         start: "top 20%",
+//         end: "top 0%", // End point define karne se scrub zyada accurate chalta hai
+//         scrub: 4,
+//         preventOverlaps: true, // Animations ko aapas mein takrane se rokta hai
+//         fastScrollEnd: true,   // Fast scroll pe animation ko turant end state pe pahunchata hai
+//     }
+// });
+
+// // Main element animation
+// boom.to("#gola", {
+//     scale: 0.5,
+//     top: "92vh",
+//     backgroundColor: "#B8C7B3",
+//     // ease: "power1.inOut",
+//     overwrite: "auto",      // Kisi bhi conflicting animation ko overwrite karega
+//     immediateRender: false  // Initial frame par purana color force nahi hone dega
+// });
+
+// // Text animations (Grouped using "<" to start together)
+// const textElements = ["#p h1", "#roj h1", "#ect h1", "#s h1"];
+
+// textElements.forEach((el) => {
+//     boom.to(el, {
+//         color: "#3c3c3c",
+//         overwrite: "auto",
+//         immediateRender: false
+//     }, "<"); // Sab ek saath start honge
+// },"<");
+
+gsap.to("#view",{
+    opacity:1,
+    zIndex:15,
+     scrollTrigger:{
+        trigger:"#view",
+        scroller:"#main",
+        scrub:1,
+        // markers:true,
+        start:"top 60%",
+        end:"top 55%"
+    }
+})
+gsap.from("#projects",{
+    opacity:0,
+    y:10,
+     scrollTrigger:{
+        trigger:"#view",
+        scroller:"#main",
+        scrub:true,
+        // markers:true,
+        start:"top 90%",
+        // end:"top 580%"
+    }
+})
+
+gsap.from("#projects2",{
+    opacity:0,
+    y:10,
+     scrollTrigger:{
+        trigger:"#view",
+        scroller:"#main",
+        scrub:true,
+        // markers:true,
+        start:"top 90%",
+        // end:"top 580%"
+    }
+})
+var leaf =gsap.timeline({
+     scrollTrigger:{
+        trigger:"#view",
+        scroller:"#main",
+        scrub:1,
+        // markers:true,
+        start:"top 60%",
+        end:"top 59%"
+    }
+});
+ leaf.from(".leaf-exact",{
+    opacity:0,
+   
+ })
+  leaf.from(".leaf-exact2",{
+    opacity:0,
+   
+ },"<")
+  leaf.from("#leaft",{
+    opacity:0,
+    y:10
+   
+ },"<")
+
+
+
+
+
+
+// var patta1 = document.querySelector(".leaf-exact");
+// var patta1 = document.querySelector(".leaf-exact2");
+// var gol = document.querySelector("#gola");
+var vw = document.querySelector("#view");
+vw.addEventListener("mouseenter",function(){
+    var pt = gsap.timeline();
+    pt.to("#gola",{
+        scale:0.58
+    })
+    pt.to(".leaf-exact",{
+        rotate:"18deg",
+        top:"595vh",
+        left:"36%"
+    },"<")
+      pt.to(".leaf-exact2",{
+        rotate:"47deg",
+        top:"600vh",
+        left:"53%"
+    },"<")
+})
+
+vw.addEventListener("mouseleave",function(){
+    var ptt = gsap.timeline();
+    ptt.to("#gola",{
+        scale:0.5
+    })
+    ptt.to(".leaf-exact",{
+        rotate:"-10deg",
+        top:"603vh",
+        left:"37.3%"
+    },"<")
+      ptt.to(".leaf-exact2",{
+        rotate:"-17deg",
+        top:"593vh",
+        left:"51%"
+    },"<")
+})
+
+var change = gsap.timeline({
+    scrollTrigger:{
+        trigger:"#leaft",
+        scroller:"#main",
+        // markers:true,
+        start:"top 27%",
+        scrub:3
+    }
+});
+change.to("#front",{
+    backgroundColor:"#f6f6f6"
+})
+change.to("#main",{
+    backgroundColor:"#f6f6f6"
+},"<")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Saare animations ke baad ye config daal do
+gsap.config({
+  nullTargetWarn: false,
+  trialWarn: false,
+});
+
+// Ye sabse important hai fast scrolling ke liye
+ScrollTrigger.config({ 
+  limitCallbacks: true, 
+  ignoreMobileResize: true,
+  syncInterval: 100 // Smoothness aur sync badha deta hai
+});
+// Jab sab load ho jaye, ek baar refresh kar do
+window.addEventListener("load", function() {
+    ScrollTrigger.refresh();
+});
+
+// Fast scrolling glitches ke liye ek "Soft Refresh" logic
+let scrollTimeout;
+window.addEventListener("scroll", () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        // Scroll rukne ke 200ms baad saare triggers ko check karega
+        ScrollTrigger.refresh();
+    }, 200);
+});
+
+
+
+
+
+
+// window.addEventListener("wheel", (e) => {
+//   e.preventDefault();
+
+//   const speed = 20; // 👈 tu control karega kitna scroll hoga
+//   const direction = e.deltaY > 0 ? 1 : -1;
+
+//   locoScroll.scrollTo(
+//     locoScroll.scroll.instance.scroll.y + direction * speed,
+//     { duration: 0, disableLerp: true }
+//   );
+// }, { passive: false });
+
+
+
+////css////
+@font-face {
+    font-family: hvl;
+    src: url(./havelock.otf);
+}
+@font-face {
+    font-family: atl;
+    src: url(./attila.ttf);
+}
+@font-face {
+    font-family: dnc;
+    src: url(./DancingScript-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: rog;
+    src: url(./RougeScript-Regular.ttf);
+}
+@font-face {
+    font-family: jst;
+    src: url(./Jost-Italic-VariableFont_wght.ttf);
+}
+
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+html,body{
+width: 100%;
+height: 100%;
+}
+#main{
+    width: 100vw;
+    /* height: 500vh; */
+   position: relative;
+   background-color: #f6f6f6;
+   overflow-x: hidden;
+   will-change: transform;
+    backface-visibility: hidden;
+    
+}
+#page1{
+    width: 100vw;
+    height: 92vh;
+    position: relative;
+   background-color: transparent;
+    
+  
+   /* background-color: red; */
+}
+#nav{
+   width: 100vw; 
+   height: 10vh;
+   background-color:transparent;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   padding: 35px;
+   font-family: montserrat;
+   
+}
+#nav h4 {
+    font-weight:500;
+}
+
+
+#ntxt{
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 3.8vw;
+    /* background-color: red; */
+    display: inline-block;
+    position: absolute;
+    left: 24%;
+    top: 32%;
+}
+#ntxt h1{
+    font-weight: 400;
+    letter-spacing: -10px;
+    color: #3C3C3C;
+}
+#ntxt2{
+      font-family: dnc;
+    
+    font-size: 5vw;
+    /* background-color: red; */
+    display: inline-block;
+    position: absolute;
+    left: 41%;
+    top: 46%;
+    color: #3C3C3C;
+
+}
+#ntxt2 h1{
+    font-weight: 200;
+    letter-spacing: 8px;
+}
+
+#oc{
+    width: 7.5vw;
+    height: 7.5vw;
+    background-color: #EBE3CF;
+    border-radius: 50%;
+    left: 14%;
+    top: 20%;
+    position: absolute;
+    background-image: url(./upload-9790834f-513a-4aed-ab75-6be2fd012408.png);
+    background-position: center;
+    background-size: cover;
+     animation-name: gol;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    z-index: 2;
+
+}
+#tc{
+    width: 7.5vw;
+    height: 7.5vw;
+    background-color:#EAEAEA;
+    border-radius: 50%;
+    left: 84%;
+    top: 64%;
+    position: absolute;
+    background-image: url(./grey\ gol.png);
+    background-position: center;
+    background-size: cover;
+     animation-name: gol;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+      z-index: 2;
+     /* transition: background-color 0.1s ease; */
+
+}
+#thc{
+    width: 7.5vw;
+    height: 7.5vw;
+    background-color: #E5EEE4;
+    border-radius: 50%;
+    left: 45%;
+    top: 77%;
+    position: absolute;
+    background-image: url(./Picsart_26-03-26_22-03-11-620.png);
+    background-position: center;
+    background-size: cover;
+    animation-name: gol;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+      z-index: 2;
+
+}
+@keyframes gol {
+    100%{
+        rotate:360deg;
+    }
+}
+
+
+
+#one{
+    width: 12vw;
+    height: 14vw;
+    background-color: bisque;
+    position: absolute;
+    top: 0%;
+    left: 18%;
+    /* background-image: url(./1756920966387.jpeg.jpg.jpeg);
+    background-position: 50% 0%;
+    background-size: 230%;
+    background-repeat: no-repeat; */
+    
+
+}
+
+#two{
+    width: 22vw;
+    height: 24vw;
+    background-color: bisque;
+    position: absolute;
+    top: 24%;
+    right: 1%;
+    /* background-image: url(./prlr\ 1.jpeg);
+    background-position: -5% 10%;
+    background-size: cover; */
+}
+
+#three{
+    width: 47vw;
+    height: 16vw;
+    background-color: bisque;
+    position: absolute;
+    bottom: 0%;
+    left: 2%;
+    /* background-image: url(./proj.jpeg);
+    background-position: 50% 50%;
+    background-size: cover; */
+}
+
+
+
+
+
+/* #onej{
+    width: 12vw;
+    height: 14vw;
+    background-color: rgb(255, 0, 0);
+    position: absolute;
+    top: 0%;
+    left: 18%;
+    background-image: url(./-Secondary\ bedroom-20250531-3.jpg.jpeg);
+    background-position: 70%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0;
+    
+
+}
+
+#twoj{
+    width: 22vw;
+    height: 24vw;
+    background-color: rgb(255, 0, 0);
+    position: absolute;
+    top: 24%;
+    right: 1%;
+    background-image: url(./fr.jpg);
+    background-position: 25% 10%;
+    background-size: cover;
+    opacity: 0;
+
+}
+
+#threej{
+    width: 47vw;
+    height: 16vw;
+    background-color: rgb(255, 0, 0);
+    position: absolute;
+    bottom: 0%;
+    left: 2%;
+    background-image: url(./Unnamed-20250828-131658.jpg.jpeg);
+    background-position: 50% 50%;
+    background-size: cover;
+    opacity: 0;
+
+} */
+
+
+
+#one, #two, #three {
+    position: absolute;
+    overflow: hidden;
+    /* Remote Control Variables */
+    --blur-after: 0px;
+    --blur-before: 20px;
+    --opacity-before: 0;
+    --reveal-img: none;
+}
+
+/* --- SABSE IMPORTANT: Dono Layers ka Common Setup --- */
+#one::after,
+#two::after, 
+#three::after, #three::before {
+    content: ""; /* Ye likhna zaroori hai, warna image nahi dikhegi */
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+}
+
+#two::before {
+    content: ""; /* Ye likhna zaroori hai, warna image nahi dikhegi */
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background-position:0% 10%;
+    background-size: cover;
+}
+
+#one::before{
+     content: ""; /* Ye likhna zaroori hai, warna image nahi dikhegi */
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background-position:0% 5%;
+    background-size: cover;
+}
+
+
+/* --- Base Images (AFTER Layer) --- */
+#one::after { 
+    background-image: url(./1756920966387.jpeg.jpg.jpeg); /* Check kar file fv.jpg hai ya fr.jpg */
+    filter: blur(var(--blur-after)); 
+    z-index: 1; 
+}
+#two::after { 
+    background-image: url(./prlr\ 1.jpeg); 
+    filter: blur(var(--blur-after)); 
+    z-index: 1; 
+}
+#three::after { 
+    background-image: url(./proj.jpeg); 
+    filter: blur(var(--blur-after)); 
+    z-index: 1; 
+}
+
+/* --- Reveal Images (BEFORE Layer) --- */
+#one::before, #two::before, #three::before {
+    background-image: var(--reveal-img); 
+    opacity: var(--opacity-before);
+    filter: blur(var(--blur-before));
+    z-index: 2; /* Ye base image ke upar aayegi */
+}
+
+
+#page1j{
+    width: 100vw;
+    height: 92vh;
+    background-color: #F5EFE1;
+    position: absolute;
+    opacity:0;
+   z-index: -1;
+    top: 0%;
+}
+#page1m{
+    width: 100vw;
+    height: 92vh;
+    background-color: #EBF4EA;
+    position: absolute;
+    opacity:0;
+   z-index: -1;
+    top: 0%;
+}
+
+
+#poster{
+    width: 26vw;
+    position: absolute;
+    height: 34vw;
+    /* background-color: red; */
+   z-index: 4;
+   margin-top: 30vh;
+   margin-left: 41vh;
+   background-image: url(./kids\ room\ desk\ corner.png);
+    
+    background-position: center;
+    background-size: cover;
+}
+
+#ocr{
+    width: 7.5vw;
+    height: 7.5vw;
+    background-color: #EBE3CF;
+    border-radius: 50%;
+    left: 14%;
+    top: 20%;
+    position: absolute;
+    /* background-image: url(./upload-9790834f-513a-4aed-ab75-6be2fd012408.png); */
+    background-position: center;
+    background-size: cover;
+     /* animation-name: gol;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear; */
+    z-index: 1;
+
+}
+#tcr{
+    width: 7.5vw;
+    height: 7.5vw;
+    background-color:#EAEAEA;
+    border-radius: 50%;
+    left: 84%;
+    top: 64%;
+    position: absolute;
+    /* background-image: url(./grey\ gol.png); */
+    background-position: center;
+    background-size: cover;
+     animation-name: gol;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+      z-index: 1;
+     /* transition: background-color 0.1s ease; */
+
+}
+#thcr{
+    width: 7.5vw;
+    height: 7.5vw;
+    background-color: #E5EEE4;
+    border-radius: 50%;
+    left: 45%;
+    top: 77%;
+    position: absolute;
+    /* background-image: url(./gol\ mint.png); */
+    background-position: center;
+    background-size: cover;
+    animation-name: gol;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+      z-index: 1;
+
+}
+
+
+
+#post{
+    width: 12vw;
+    height: 32vh;
+    /* background-color: red; */
+    position: absolute;
+    margin-top: 80vh;
+    margin-left: 25vh;
+    z-index: 4;
+   background-image: url(./fr.jpg);
+   background-position: 30% 10%;
+   background-size: cover;
+}
+#front{
+    width: 100vw;
+    height: 500vh;
+    background-color:#F5EFE1;
+    margin-top: 120vh;
+    position: relative;
+}
+
+
+#info p{
+    width: 16vw;
+    font-size: .8vw;
+   margin-left: 5px;
+    line-height: 1.5vw;
+}
+#info {
+   
+    display: flex;
+    flex-direction: column;
+    font-family: montserrat;
+    position: absolute;
+  margin-top: 32vh;
+  margin-left: 117vh;
+  
+}
+#info h1{
+    font-weight: 400;
+      text-transform: uppercase;
+      font-size: 4vw;
+      letter-spacing: -5px;
+      color:#3C3C3C;
+      line-height: 3.7vw;
+
+}
+#info h1:nth-child(3){
+    margin-top: 4.8vw;
+    margin-bottom: 1.5vw;
+}
+
+#note{
+    width: 13vw;
+    height: 6vh;
+   
+    position: absolute;
+top: 26%;
+left: 56%;
+background-image: url(./int\ image.png);
+background-position: center;
+background-size: contain;
+background-repeat: no-repeat;
+}
+#invsbl{
+    width: 100vw;
+    height: 10vh;
+    background-color: transparent;
+    position: absolute;
+    top: 149%;
+  overflow: hidden;
+  /* background-color: red; */
+}
+#capt{
+    width: 90%;
+    height: 100%;
+    /* background-color: rgb(39, 19, 19); */
+    right: -70%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 4;
+    
+    
+}
+.part #l{
+    width: 3.2vw;
+    height: 1px;
+    background-color: rgb(231, 192, 192);
+}
+.part{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-style: italic;
+    color:#CAB193;
+    font-size: 4.3vw;
+    font-family: rog;
+}
+.part h2{
+    font-weight: 500;
+}
+
+#gola{
+    width: 29.25vw;
+    height: 29.25vw;
+    background-color:#EBE3CF;
+  top: 198vh;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%,0);
+    opacity: 0;
+    z-index: 10;
+
+}
+#cv{
+    width: 10vw;
+    height: 20vw;
+    background-color: red;
+    /* margin-top: 50vh; */
+}
+#sym{
+    width: 230vw;
+    height: 8vw;
+    position: absolute;
+    top: 0%;
+    left: -1%;
+    background-color:transparent;
+   border: 2px solid #CAB193;
+   display: flex;
+   gap: 20px;
+   align-items: center;
+   z-index: 11;
+}
+/* #sym1{
+    width: 10vw;
+    height: 10vw;
+    position: absolute;
+    top: 30%;
+    background-color: red;
+} */
+#log{
+    width: 7.3vw;
+    height: 3.3vw;
+    border-radius: 50%;
+    background-color: rgb(244, 169, 169);
+
+
+}
+.slide:nth-child(2n+1) #log {
+    background-image: url(./boxroom\ \(1\).png);
+    background-position: center;
+    background-size: cover;
+
+}
+.slide:nth-child(2n) #log {
+    background-image: url(./Unnamed-20250827-2.jpg.jpeg);
+    background-position: center;
+    background-size: cover;
+
+}
+.slide{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.slide h1{
+    font-style: italic;
+    font-size: 4vw;
+    font-weight: 300;
+    color:  #CAB193;
+}
+.frame{
+    width: 27.5vw;
+    height: 29.4vw;
+   background-color:transparent;
+    
+    position: absolute;
+    left: 50%;
+    top: 9%;
+    z-index: 12;
+
+}
+.im{
+    width: 100%;
+    height: 80%;
+    background-color: transparent;
+    background-image: url(./fv.jpg);
+    background-position: center;
+    background-size: cover;
+}
+.det{
+    width: 100%;
+    height: 10%;
+   background-color:transparent;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 80px;
+    color:#3C3C3C;
+}
+.det2{
+    width: 100%;
+    height: 10%;
+   background-color:transparent;
+   display: flex;
+   flex-direction: column;
+   align-items: flex-end;
+   justify-content: center;
+}
+.det h2{
+    font-family: montserrat;
+    font-size: .8vw;
+    font-weight: 500;
+    margin-left: 3px;
+  
+    
+}
+.det h3{
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: .7vw;
+}
+.det2 h3{
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: .7vw;
+    color: #3C3C3C;
+
+}
+.frame2{
+    width: 39.8vw;
+    height: 25vw;
+    background-color: transparent;
+    
+    position: absolute;
+    left: 10%;
+    top: 22%;
+    z-index: 12;
+
+}
+.im2{
+    width: 100%;
+    height: 80%;
+    background-image: url(./59940.png);
+    background-position: center;
+    background-size: cover;
+}
+
+/* yoyoyoyoyy */
+
+
+
+
+
+.frame3{
+    width: 39.8vw;
+    height: 33.5vw;
+    background-color: transparent;
+    
+    position: absolute;
+    left: 35.7%;
+    top: 35%;
+    z-index: 12;
+
+}
+.im3{
+    width: 100%;
+    height: 80%;
+
+    background-image: url(./kids\ room\ desk\ corner.png);
+    background-position: 2% 0%;
+    background-size: cover;
+}
+.frame4{
+    width: 26vw;
+    height: 38vw;
+    background-color: transparent;
+    
+    position: absolute;
+    left: 9.5%;
+    top: 47%;
+    z-index: 12;
+
+}
+.im4{
+    width: 100%;
+    height: 90%;
+
+    background-image: url(./boxroom\ \(2\).png);
+    background-position: 2% 0%;
+    background-size: cover;
+}
+.det3{
+    width: 100%;
+    height: 9%;
+   background-color:transparent;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 80px;
+    color:#3C3C3C;
+}
+.det4{
+    width: 100%;
+    height: 1%;
+   background-color:transparent;
+   display: flex;
+   flex-direction: column;
+   align-items: flex-end;
+   justify-content: center;
+}
+.det3 h2{
+    font-family: montserrat;
+    font-size: .8vw;
+    font-weight: 500;
+    margin-left: 3px;
+  
+    
+}
+.det3 h3{
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: .7vw;
+}
+.det4 h3{
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: .7vw;
+    color: #3C3C3C;
+
+}
+
+
+.frame5{
+    width: 28vw;
+    height: 25vw;
+    background-color: transparent;
+    
+    position: absolute;
+    left: 63%;
+    top: 57%;
+    z-index: 12;
+
+}
+.im5{
+    width: 100%;
+    height: 80%;
+    
+    background-image: url(./parlour.jpg.jpeg);
+    background-position: 2% 0%;
+    background-size: cover;
+}
+
+
+#p h1 {
+    font-family: jst;
+    font-size: 10vw;
+    font-weight: 400;
+    color: #3c3c3c2a;
+    position: absolute;
+    top: 68.05vh;
+    left: 10vw;
+    z-index: 11;
+
+}
+#roj h1{
+    font-family:jst;
+    font-size: 9.5vw;
+    font-weight: 400;
+    color: #3c3c3c2a;
+    
+    letter-spacing: -5px;
+    position: absolute;
+    top: 70vh;
+    left: 30vw;
+    z-index: 11;
+    opacity: 1;
+
+}
+#ect h1{
+    font-family: jst;
+    font-size: 9.5vw;
+    font-weight: 400;
+    color: #3c3c3c2a;
+    
+    letter-spacing: -4px;
+     position: absolute;
+    top: 92vh;
+    left: 50vw;
+    z-index: 11;
+    
+
+
+}
+#s h1{
+    font-family: jst;
+    font-size: 10.1vw;
+    font-weight: 400;
+    color: #3c3c3c2a;
+   
+     position: absolute;
+    top: 69vh;
+    right: 10vw;
+    z-index: 11;
+
+}
+
+
+#view{
+    width: 15vw;
+    height: 15vw;
+    background-color: transparent;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 0.5vw;
+    font-family: hvl;
+    position: absolute;
+    top:384vh;
+    left: 50%;
+    transform: translate(-50%,0%);
+    z-index: -1;
+    opacity: 0;
+}
+
+/* CSS */
+.leaf-exact {
+  width: 12vw;  /* Image ki original width */
+  position: absolute;
+  top:603vh;
+  left: 37.3%;
+  rotate: -10deg;
+  /* transform: translate(-50%,0%); */
+  height: 12vw; /* Image ki original height */
+  
+  /* 1. Yahan woh exact color dalo jo tujhe chahiye */
+  background-color: #B8C7B3;
+  
+  /* 2. Leaf ki PNG ko mask ki tarah use karo */
+  -webkit-mask-image: url(./phool.png); /* Apni leaf image ka path dalo */
+  mask-image: url(./phool.png);
+  
+  /* 3. Mask settings (jaise background settings hote hain) */
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  opacity: 1;
+}
+.leaf-exact2 {
+  width: 10vw;  /* Image ki original width */
+  position: absolute;
+  top:593vh;
+  left: 51%;
+  rotate: -17deg;
+  /* transform: translate(-50%,0%); */
+  height: 10vw; /* Image ki original height */
+  
+  /* 1. Yahan woh exact color dalo jo tujhe chahiye */
+  background-color: #B8C7B3;
+  
+  /* 2. Leaf ki PNG ko mask ki tarah use karo */
+  -webkit-mask-image: url(./phool\ 2.png); /* Apni leaf image ka path dalo */
+  mask-image: url(./phool\ 2.png);
+  
+  /* 3. Mask settings (jaise background settings hote hain) */
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  opacity: 1;
+
+}
+
+
+#leaft{
+    width:70vw ;
+    height: 10vh;
+    /* background-color: red; */
+    position: absolute;
+    top: 605vh;
+    left: 50%;
+    transform: translate(-50%,0%);
+    font-family: hvl;
+    font-size: 0.75vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #3c3c3cb9;
+    letter-spacing: -1px;
+    opacity: 1;
+}
+#leaft1{
+    margin-left: 3vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+#leaft2{
+    margin-right: 3vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+#leaft1 h4{
+    font-weight: 300;
+}
+
+#projects{
+    position: absolute;
+    top: 357.5vh;
+    font-family: jst;
+    font-size: 5.1vw;
+    text-transform: uppercase;
+    left: -22%;
+}
+#projects h1{
+    font-weight: 400;
+    /* -webkit-text-stroke: 1px #B8C7B3; */
+    color:#EBF4EA ;
+    /* paint-order: stroke fill; */
+    text-shadow: 
+        -1px -1px 0 #B8C7B3,  
+         1px -1px 0 #B8C7B3,
+        -1px  1px 0 #B8C7B3,
+         1px  1px 0 #B8C7B3;
+}
+#projects2{
+    position: absolute;
+    top: 357.5vh;
+    font-family: jst;
+    font-size: 5.1vw;
+    text-transform: uppercase;
+    right: -22%;
+}
+#projects2 h1{
+    font-weight: 400;
+    /* -webkit-text-stroke: 1px #B8C7B3; */
+    color:#EBF4EA ;
+    /* paint-order: stroke fill; */
+    text-shadow: 
+        -1px -1px 0 #B8C7B3,  
+         1px -1px 0 #B8C7B3,
+        -1px  1px 0 #B8C7B3,
+         1px  1px 0 #B8C7B3;
+}
+
+
+
+
+////html////
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="main">
+        <div id="page1">
+            <div id="nav">
+                <h4>AFFAT</h4>
+                <h4>PROJECTS</h4>
+                <h4>1825@gmail.com</h4>
+            </div>
+
+            <div id="note">
+            </div>
+            <div id="one"></div>
+            <div id="two"></div>
+            <div id="three"></div>
+
+
+            <div id="ocr"></div>
+            <div id="tcr"></div>
+            <div id="thcr"></div>
+
+
+
+            <div id="onej"></div>
+            <div id="twoj"></div>
+            <div id="threej"></div>
+            <div id="ntxt">
+                <h1>veyra</h1>
+            </div>
+            <div id="ntxt2">
+                <h1>Interior</h1>
+            </div>
+
+            <div id="oc"></div>
+            <div id="tc"></div>
+            <div id="thc"></div>
+
+
+
+            <div id="invsbl">
+                <div id="capt">
+                    <div class="part">
+                        <div id="l"></div>
+                        <h2>and&nbsp;balance</h2>
+                    </div>
+                    <div class="part">
+                        <div id="l"></div>
+                        <h2>and&nbsp;cozy</h2>
+                    </div>
+                    <div class="part">
+                        <div id="l"></div>
+                        <h2>and&nbsp;luxarious</h2>
+                    </div>
+                    <div class="part">
+                        <div id="l"></div>
+                        <h2>and&nbsp;balance</h2>
+                    </div>
+                    <div class="part">
+                        <div id="l"></div>
+                        <h2>and&nbsp;cozy</h2>
+                    </div>
+                    <div class="part">
+                        <div id="l"></div>
+                        <h2>and&nbsp;luxarious</h2>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div id="page1j"></div>
+        <div id="page1m"></div>
+
+        <div id="poster"></div>
+        <div id="post"></div>
+        <div id="info">
+            <h1>believe in</h1>
+            <h1>comfortable</h1>
+            <h1>design</h1>
+            <p>My name is Iffat Perween and the main line
+                of my activity is the creation of interior design
+                for apartments, houses and commercial premises. My goal is not just to create a picture but to realize
+                it using new technologies and materials, take into account all the clients' preferences and make
+                everything ergonomically comfortable.</p>
+        </div>
+        <div id="front">
+
+            <div id="sym">
+                <div class="slide">
+                    <div id="log"></div>
+                    <h1>INTERIOR DESIGN</h1>
+                </div>
+
+                <div class="slide">
+                    <div id="log"></div>
+                    <h1>3D MODELING</h1>
+                </div>
+
+                <div class="slide">
+                    <div id="log"></div>
+                    <h1>INTERIOR DESIGN</h1>
+                </div>
+
+                <div class="slide">
+                    <div id="log"></div>
+                    <h1>3D VISUALIZER</h1>
+                </div>
+
+                <div class="slide">
+                    <div id="log"></div>
+                    <h1>INTERIOR DESIGN</h1>
+                </div>
+
+
+            </div>
+            <div id="sym1"></div>
+
+
+            <div class="frame">
+                <div class="im"></div>
+                <div class="det">
+                    <h2>01</h2>
+                    <h3>Residential complex <br> Cheryomushki</h3>
+                </div>
+                <div class="det2">
+                    <h3>location </h3>
+
+                       <h3>35.9584° N, 74.9473° E</h3> 
+                </div>
+            </div>
+             <div class="frame2">
+                <div class="im2"></div>
+                <div class="det">
+                    <h2>02</h2>
+                    <h3>Residential complex <br> Cheryomushki</h3>
+                </div>
+                <div class="det2">
+                    <h3>location </h3>
+
+                       <h3>35.9584° N, 74.9473° E</h3> 
+                </div>
+            </div>
+
+              <div class="frame3">
+                <div class="im3"></div>
+                <div class="det">
+                    <h2>03</h2>
+                    <h3>Residential complex <br>KID'S ROOM</h3>
+                </div>
+                <div class="det2">
+                    <h3>location </h3>
+
+                       <h3>35.9584° N, 74.9473° E</h3> 
+                </div>
+            </div>
+
+             <div class="frame4">
+                <div class="im4"></div>
+                <div class="det3">
+                    <h2>04</h2>
+                    <h3>Residential complex <br>Luxarious Wardrobe</h3>
+                </div>
+                <div class="det4">
+                    <h3>location </h3>
+
+                       <h3>35.9584° N, 74.9473° E</h3> 
+                </div>
+            </div>
+
+              <div class="frame5">
+                <div class="im5"></div>
+                <div class="det">
+                    <h2>05</h2>
+                    <h3>Commercial complex <br>Parlour</h3>
+                </div>
+                <div class="det2">
+                    <h3>location </h3>
+
+                       <h3>35.9584° N, 74.9473° E</h3> 
+                </div>
+            </div>
+
+            <div id="p">
+             <h1>P</h1>
+            </div>
+            <div id="roj">
+             <h1>ROJ</h1>
+
+            </div>
+            <div id="ect">
+             <h1>ECT</h1>
+
+            </div>
+            <div id="s">
+             <h1>S</h1>
+
+            </div>
+
+          <div id="view">
+            <h2>View all</h2>
+          </div>
+
+         <div id="projects">
+            <h1>projects</h1>
+         </div>
+          <div id="projects2">
+            <h1>projects</h1>
+         </div>
+          
+        </div>
+        <div id="cv"></div>
+
+        <div id="gola"></div>
+         <div class="leaf-exact"></div>
+         <div class="leaf-exact2"></div>
+         <div id="leaft">
+            <div id="leaft1">
+                <h4>comfortable & cozy</h4>
+                <h4>style</h4>
+            </div>
+            <div id="leaft2">
+                <h4>style, character</h4>
+                <h4>& desires</h4>
+            </div>
+         </div>
+ 
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"
+        integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"
+        integrity="sha512-P2IDYZfqSwjcSjX0BKeNhwRUH8zRPGlgcWl5n6gBLzdi4Y5/0O4zaXrtO4K9TZK6Hn1BenYpKowuCavNandERg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
+
+
+
+#3D4544  
+  window.g_selfDomain = 'coohom';
+    window.g_userRole = ''; // 当前用户角色
+    window.g_authorities = 'ROLE_USER'; // 当前用户身份集合
+    window.g_yunHost = '';
+    window.g_siteHost = '';
+    window.g_lang = 'en_IN';
+    window.g_locale = 'en_IN';
+    window.g_designId = '3FO3EMRIORJM';
+    window.g_planId = '3FO3EMRIORJM';
+    window.g_parentPlanId = '3FO3KE4EPP3S';
+    window.g_levelId = 'NIIWBMIKTLASQAABAAAAAAQ8';
+    window.g_designName ="Rectangle Room 2";
+    window.g_redirectDecoration = true;
+    window.g_isH5 = true;
+    window.g_displayLogo = false; // coohom工具左上角不显示logo
+    window.g_isYunTuUser = 'false';
+    window.g_yuntuGuide = 'false';
+    window.g_yuntuEntrance = 'true';
+    window.g_yuntuNewRegister = 'null';
+    window.g_appStage = '';
+    window.g_projectStage = 'PROD';
+    window.g_bimAccess = 'false';
+    window.g_cdnDomain = '//cf.coohom.com';
+    window.hmacSign = '';
+    window.g_email = 'skashiq018@gmail.com'; // 当前用户email
+    window.g_userId = '3FO4FF30TIPB'; // 当前用户id
+    window.g_UserId = '3FO4FF30TIPB'; // 当前用户id,同步kujiale云图承载页写法
+    window.g_userName = 'skashiq018';window.g_tenantType ={"tenantValue":0,"tenantName":"C_BASIC","userType":{"isB":false,"isC":true,"isO":false,"isP":false,"isR":false,"isW":false,"isT":false}};
+    window.g_tenantValue =0; // 当前租户类型, -1:无身份类型
+    window.g_accountName = ' '; // 公司名称
+    window.g_isRootAccount =false;
+    window.g_rootAccountId = ''; // 公司账户root_id
+    window.g_accountId = ''; // 商家账户root_id
+    window.g_companyName = ''; // 公司名称
+    window.g_favicon = '//qhstaticssl.coohom.com/newt/36/image/png/1569233357136/FBBB4709AF48AE4B87910E2D23227E7F.png';
+    window.g_coohom_sw_close = 'false';
+    window.g_stepBystepGuide ={"enable":false}; // 分步引导配置参数
+    window.g_kujialeDefaultLogoHack ={"value":true,"debug":false,"characteristicString":"/newt/102417/image/svgxml/1625121864526/B642EC343E611507A6A7793AECB89612.svg"}; // 开启酷家乐默认Logo异常显示监听移除Hack脚本参数
+    window.g_holiday_theme ={"status":false,"value":{"diy_url":"/pub/tool/bim/cloud","copy_share_key":"lxb4orvmdrca4aaiba888888","yundesign_container_id":"#kaf-app-0","banner_nav_ur":"//qhstaticssl.kujiale.com/newt/100101/image/jpeg/1576132503335/C96A98EDE7F4FD5632BAA5BF75FE4400.jpg","banner_height":60}}; // 假日主题方案配置参数
+    window.g_release_information ={"status":false,"value":{"release_date":"2022/01/10","message":"release.information.message","a_link":{"status":true,"message":"release.information.learnMore","href":"https://www.coohom.com/forum?moduleId=0"},"exclude_users":["ROLE_SAAS_USER"],"exclude_regions":[],"hide_time":600000,"banner_height":48,"yundesign_container_id":"#kaf-app-0"}}; // 工具发布信息配置参数
+    window.g_renderFeatureSwitch ={"growthAnimation":false,"vipGuide":false,"yunrender_roamVideo":true,"new_picture_gallery":true,"new_image_beauty":true,"lightStyle_orbitOnlyMode":true,"arrayPattern":false,"showCoohomPanoSetting":false,"newGalleryHtml":true,"yunrenderLightVersion":false,"yunrender_growthVideo":false,"yunrender_enterpriseLightTemplate":false,"kooRender":false,"lightOrder":true,"renderModal_ultraFastRender":false,"renderModal_detectBeforeRendering":false,"renderModal_multiUltraFastRender":false,"renderModal_enterpriseUserLeisureRender":false,"renderModal_detectAfterRendering":false,"renderModal_gpuRender":false,"yunrender_video_upgrade":true,"yunrender_template_video":true,"yunrenderDynamicImport":true,"templateVideoPreview":false,"yunrender_coohom_daily_720P":true,"yunrender_coohom_new_upgrade":true,"yunrender_templateVideo_iframe":false,"yunrender_coohom_watermark":true,"yunrender_commonUser_16K":false,"coohom_yuntuTopbarStreamingLead":true,"yunrender_720tour_enter":true,"displayYunrenderInCatalogue":true,"yunrenderLevelTemplateSetting":true,"coohomVantageTemplateAndQuality":true,"coohom_newManualtemplateApi":true,"yunrenderBackgroundsWebp":true,"coohom_yunrenderNewCameraView":true,"coohom_yunrender_commonUserKeEngine":true,"coohom_yunrender_allUserKeEngine":true}; // 渲染功能开关配置
+    window.g_lxNavigatorConfigs =[{"label":"decoration","saasConfigKey":"tool.yundesign.navigator.decoration","toolsTip":"lx.leftSidePanel.navigators.decoration","orderIndex":100,"visible":true},{"label":"LXMiniApp","saasConfigKey":"tool.yundesign.navigator.lx.miniapp","toolsTip":"lx.leftSidePanel.navigators.miniapp","orderIndex":200,"visible":false},{"label":"LXEntryMiniApp","saasConfigKey":"tool.yundesign.navigator.lxentry.miniapp","toolsTip":"lxentry.leftSidePanel.navigators.miniapp","orderIndex":210,"visible":true},{"label":"smartDesign","saasConfigKey":"tool.yundesign.navigator.smartDesign","toolsTip":"lx.leftSidePanel.navigators.kuaida","orderIndex":300,"visible":false},{"label":"enterpriseLibrary","saasConfigKey":"tool.yundesign.navigator.enterprise","toolsTip":"lx.leftSidePanel.navigators.enterprise","orderIndex":400,"visible":true},{"label":"publicLibrary","saasConfigKey":"tool.yundesign.navigator.public","toolsTip":"lx.leftSidePanel.navigators.modelLibrary","orderIndex":500,"visible":true},{"label":"personalLibrary","saasConfigKey":"tool.yundesign.navigator.personal","toolsTip":"lx.tool.yundesign.navigator.personal","orderIndex":600,"visible":true}];
+    window.g_internalMiniApps =[{"id":"CoohomSmartDesign","title":"miniapp.title.coohom.smartDesign","entry":["EVENT_START"],"entryPosition":"LEFT_NAVIGATOR_MINIAPP_ENTRY","icon":"/image/svgxml/1681884292724/leftSide-kuaida.svg","hoverIcon":"/image/svgxml/1681884292723/leftSide-kuaida-selected.svg","endpoint":"/pub/tool/mini-app/ai","expansion":{"lx":{"title":"miniapp.title.lx.smartDesign","endpoint":"https://miniapp-cos.kujiale.com/4e796879/manifest.json"}}},{"id":"LxMiniApp","title":"lx.miniapp.header.title","entry":["EVENT_START"],"entryPosition":"LEFT_NAVIGATOR_MINIAPP_ENTRY","icon":"/image/png/1696922221316/lx-miniapp-logo.png","hoverIcon":"/image/svgxml/1691402514948/leftSide-lx-selected.svg","endpoint":"/pub/tool/mini-app/lxwindow","whiteListKey":"lx"},{"id":"LxEntryMiniApp","title":"lxentry.leftSidePanel.navigators.miniapp","entry":["EVENT_START"],"entryPosition":"LEFT_NAVIGATOR_MINIAPP_ENTRY","icon":"/image/png/1702360468666/lx_entry_miniapp_topbar_logo.png","hoverIcon":"/image/png/1702360468666/lx_entry_miniapp_topbar_logo_hover.png","endpoint":"/pub/tool/mini-app/lxentry","whiteListKey":"lx"},{"id":"LxDoorMiniApp","title":"lx.door.header.title","entry":["EVENT_START"],"entryPosition":"LEFT_NAVIGATOR_MINIAPP_ENTRY","icon":"/image/png/1710300735596/0C57EC68C8BF4A4D2D7BC9DAC177A3EA.png","hoverIcon":"/image/svgxml/1691402514948/leftSide-lx-selected.svg","endpoint":"/pub/tool/mini-app/lxdoor","whiteListKey":"lx"},{"id":"CoohomNewUserGuide","title":"coohom.whole.user.duide","entry":["EVENT_START"],"entryPosition":"","icon":"","hoverIcon":"","endpoint":"/pub/site/activity/tool-immersive-guidance-idp"}];
+    window.g_redirectUrls =["/pub/market/portal/home","/pub/saas/apps/project/list","/pub/saas/apps/project/detail","/pub/saas/resources/furniture-combinations","/pub/saas/apps/project/team/list","/pub/saas/apps/project/team/detail","/pub/saas/apps/project/share","https://pastel.assaba.com","https://sandbox.glancingeye.com","https://newcasa.ai","https://www.homeplushub.com"]; // 工具里url跳转白名单
+    window.g_mmUnitAccounts =["3FO4K5MONHX0","3FO4K6SB7TS5"]; // 需要设置为mm的账户
+    window.g_bomBlcakList =["3FO4K5MONHX0","3FO4K6SB7TS5","HANSSEM","설계관리","3FO4K86DT3WV","3FO4K6IHYHUA","Reol Services Srl","Coohom-SeoulSg-tw"]; // 工具里屏蔽bom清单黑名单
+    window.g_whiteLabels =["i18n.enterprise.help-center.search-floor-plan","i18n.enterprise.contact-email","i18n.enterprise.livechat","i18n.enterprise.survey","i18n.tool.release_information","i18n.account-setting.purchase","i18n.tool.logout","i18n.tool.materialreplace.help","i18n.enterprise.help-center","i18n.enterprise.help-center.cad","i18n.lx.quick.design.tool.switch"]; // 去coohom化配置值
+    window.g_userGuideBlackList =["ROLE_SAAS_USER","ROLE_PRO","ROLE_PREMIUM"];  // 新手引导黑名单
+    window.g_modelSizeBlackList =["3FO4K5MONHX0","3FO4K6SB7TS5"];  // 模型尺寸显示黑名单
+    window.g_AiTemplateSubmitBlackList =["3FO4K5MONHX0","3FO4K6SB7TS5"]; // 快搭样板间提交按钮黑名单
+    window.g_multipleProductInfo =["3FO4K5MONHX0","3FO4K79QGFMJ","3FO4K6SB7TS5"]; // 方案中的模型，查看模型详情时显示多个信息
+    window.g_flashCfg = {
+        toolType: 'diy',redirectUrl: '/pub/saas/workbench',
+        fpId: '3FO3EMRIORJM',
+        abVersion: 'Default',
+        appConfig: {
+            userConfig: {
+                userId: '3FO4FF30TIPB',
+                score:0,
+                name: 'skashiq018'
+            },
+            designConfig: {
+                designId: '3FO3EMRIORJM',
+                levelId: 'NIIWBMIKTLASQAABAAAAAAQ8'
+            },
+            planInfo:{
+                planConfig: {
+                    planName: '',
+                    planType: '0',
+                },
+                planHelpConfig: {
+                    obsSrcPlanId: '',
+                    askId: '',
+                }
+            },
+            customerService:{"show":true},
+            toolsLinkConfig:{"diyCreate3dPano":{"show":true},"recentChanges":{"show":true},"renderFeedback":{"show":true}},
+            weakNetworkAlertThreshold:undefined,
+            lang: 'en_IN'
+        },
+    };
+    window.global_cdnDomain = 'qhstatic-sg-s3.coohom.com';
+    window.global_region = 'EAST_SOUTH_ASIA';
+    window.g_applyMiniApp =true; // 是否引入小程序
+    window.g_applyDrawingPage =true; // 是否引入彩平图
+    window.g_applyGtag =false; // 是否google gtag
+    window.g_livechat ="//qhstaticssl.coohom.com/newt/100200/application/javascript/1641785979018/E3943331768D3FF245CC3E5B65DD170F.js";
+    window.g_sentryConfig ={"apply":false,"dsn":"https://cdfc8f91c38b4f98a4b634f25e785fd8@o4504004106452992.ingest.sentry.io/4504004123033600","flooplan_tutorial":"https://youtu.be/Au_LtThM8ls"}; // sentry追踪器配置
+    window.g_occupation_images ={"interiorDesigner":"//qhstaticssl.coohom.com/image/png/1656573283386/interiorDesigner.png","architect":"//qhstaticssl.coohom.com/image/png/1656573283393/architect.png","student":"//qhstaticssl.coohom.com/image/png/16565…

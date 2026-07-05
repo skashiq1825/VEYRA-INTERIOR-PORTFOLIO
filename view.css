@@ -1,0 +1,486 @@
+@font-face {
+    font-family: hvl;
+    src: url(./havelock.otf);
+}
+@font-face {
+    font-family: crn;
+    src: url(./Corinthia-Regular.ttf);
+}
+@font-face {
+    font-family: lst;
+    src: url(./LuxuriousScript-Regular.ttf);
+}
+@font-face {
+    font-family: atl;
+    src: url(./attila.ttf);
+}
+
+@font-face {
+    font-family: dnc;
+    src: url(./DancingScript-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: rog;
+    src: url(./RougeScript-Regular.ttf);
+}
+
+@font-face {
+    font-family: jst;
+    src: url(./Jost-Italic-VariableFont_wght.ttf);
+}
+
+
+
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+html,body{
+width: 100%;
+height: 100%;
+}
+#main{
+    background-color: #F6F6F6;
+    width: 100vw;
+    height: 536vh;
+    overflow-x: hidden;
+    position: relative;
+
+}
+#nav{
+   width: 100vw; 
+   height: 10vh;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   padding: 35px;
+   font-family: montserrat;
+   
+}
+#nav h4 {
+    font-weight:500;
+}
+#page1{
+    width: 100vw;
+    height: 230vh;
+    position: absolute;
+    background-color: #F6F6F6;
+    top: 0%;
+}
+#page2{
+    width: 100vw;
+    height: 100vh;
+    background-color: aquamarine;
+    position: absolute;
+    background-image: url(./res1bed/Bedroom\(5\).webp);
+    background-position: 10% 0%;
+    background-size: cover;
+    top: 130vh;
+}
+#page3{
+     width: 100vw;
+    height: 200vh;
+    position: absolute;
+    top:336vh;
+    background-color: rgb(37, 127, 253);
+}
+#subhead{
+    width: 100vw;
+    height: 20vh;
+    margin-top: 7vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 23px;
+}
+#subhead-1 h1{
+font-family: jst;
+font-size: 9.5vw;
+font-weight: 360;
+letter-spacing: -5px;
+}
+#subhead-3 h1{
+font-family: jst;
+font-size: 9.5vw;
+font-weight: 360;
+letter-spacing: -5px;
+}
+#subhead-4 h1{
+font-family: jst;
+font-size: 9.5vw;
+font-weight: 360;
+margin-right: 10px;
+}
+#subhead-2{
+width: 25vw;
+height: 8vw;
+
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+border: 1px solid #bcbdba;
+color: #BBBBBB;
+
+}
+#subhead-2 h3{
+    font-family: montserrat;
+    font-size: 1vw;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.frame{
+    width: 23vw;
+    height: 42vw;
+   background-color:transparent;
+    margin-top: 2vw;
+    margin-left: 30px;
+    position: absolute;
+    /* left: 50%;
+    top: 9%;
+    z-index: 12; */
+
+}
+.im{
+    width: 100%;
+    height: 80%;
+    background-color: transparent;
+    background-image: url(./res1bed/Bedroom\(3\).webp);
+    background-position: 30% 0%;
+    background-size: cover;
+}
+.det1{
+    width: 100%;
+    height: 8%;
+   background-color:transparent;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 80px;
+    color:#3C3C3C;
+}
+.det2{
+    width: 100%;
+    height: 5%;
+   background-color:transparent;
+   display: flex;
+   flex-direction: column;
+   align-items: flex-end;
+   justify-content: center;
+}
+.det1 h2{
+    font-family: montserrat;
+    font-size: .8vw;
+    font-weight: 500;
+    margin-left: 3px;
+  
+    
+}
+.det1 h3{
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: .7vw;
+}
+.det2 h3{
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: .7vw;
+    color: #3C3C3C;
+
+}
+.frame .more{
+    position: absolute;
+    inset: 0;   /* top:0 left:0 right:0 bottom:0 */
+    
+    margin: 11.8vw 6.5vw; /* ye magic hai */
+    
+    width: 10vw;
+    height: 10vw;
+    border-radius: 50%;
+     background-color:#EAEAEA ;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+    
+}
+
+.frame:nth-child(4) .more{
+    position: absolute;
+    inset: 0;   /* top:0 left:0 right:0 bottom:0 */
+    
+    margin: 11.8vw 18vw; /* ye magic hai */
+    
+    width: 10vw;
+    height: 10vw;
+    border-radius: 50%;
+   background-color:#EAEAEA ;
+    
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+ 
+}
+
+.frame:nth-child(4){
+    width: 46vw;
+    height: 42vw;
+    background-color:transparent;
+    margin-top: 2vw;
+    margin-left: 30px;
+    position: absolute;
+    left: 24.9vw;
+}
+.frame:nth-child(4) .im{
+    width: 100%;
+    height: 80%;
+    background-color: transparent;
+    background-image: url(./boho/bohorestaurant\(1\).webp);
+    background-position: center;
+    background-size: cover;
+}
+.frame:nth-child(5){
+    width: 23vw;
+    height: 42vw;
+    background-color:transparent;
+    margin-top: 2vw;
+    margin-left: 30px;
+    position: absolute;
+    right: 30px;
+}
+.frame:nth-child(5) .im{
+    width: 100%;
+    height: 80%;
+    background-color: transparent;
+     /* background-image: url(./fv.jpg); */
+    background-image: none;
+     background-color: grey;
+    background-position: center;
+    background-size: cover;
+}
+.frame:nth-child(5) .more{
+    position: absolute;
+    inset: 0;   /* top:0 left:0 right:0 bottom:0 */
+    
+    margin: 11.8vw 6.5vw; /* ye magic hai */
+    
+    width: 10vw;
+    height: 10vw;
+    border-radius: 50%;
+   
+   background-color:#EAEAEA ;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+    
+}
+.frame:nth-child(6){
+    width: 33vw;
+    height: 42vw;
+    background-color:transparent;
+    margin-top: 2vw;
+    margin-left: 30px;
+    position: absolute;
+    right: 30px;
+    top: 65vw;
+    left: 0%;
+    margin-left: 30px;
+}
+.frame:nth-child(6) .im{
+    width: 100%;
+    height: 80%;
+    background-color: grey;
+    /* background-image: url(./boho.png); */
+    background-position: center;
+    background-size: cover;
+    background-image: none;
+}
+.frame:nth-child(6) .more{
+    position: absolute;
+    inset: 0;   /* top:0 left:0 right:0 bottom:0 */
+    
+    margin: 11.8vw 11.5vw; /* ye magic hai */
+    
+    width: 10vw;
+    height: 10vw;
+    border-radius: 50%;
+   background-color:#EAEAEA ;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+    
+}
+.frame:nth-child(7){
+    width: 26.8vw;
+    height: 42vw;
+    background-color:transparent;
+    margin-top: 2vw;
+    margin-left: 30px;
+    position: absolute;
+    right: 30px;
+    top: 65vw;
+    left: calc(30px + 33vw);
+    margin-left:1.5vw;
+    margin-right: 1.5vw;
+}
+.frame:nth-child(7) .im{
+    width: 100%;
+    height: 80%;
+    background-color: grey;
+    /* background-image: url(./fv.jpg); */
+    background-image: none;
+
+    background-position: center;
+    background-size: cover;
+}
+.frame:nth-child(7) .more{
+    position: absolute;
+    inset: 0;   /* top:0 left:0 right:0 bottom:0 */
+    
+    margin: 11.8vw 8.4vw; /* ye magic hai */
+    
+    width: 10vw;
+    height: 10vw;
+    border-radius: 50%;
+ background-color:#EAEAEA ;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+    
+}
+.frame:nth-child(8){
+    width: 33vw;
+    height: 42vw;
+    background-color:transparent;
+    margin-top: 2vw;
+    margin-left: 30px;
+    position: absolute;
+    right: 30px;
+    top: 65vw;
+    right: 0%;
+    margin-right: 30px;
+}
+.frame:nth-child(8) .im{
+    width: 100%;
+    height: 80%;
+    background-color: grey;
+    /* background-image: url(./fv.jpg); */
+    background-image: none;
+
+    background-position: center;
+    background-size: cover;
+}
+.frame:nth-child(8) .more{
+    position: absolute;
+    inset: 0;   /* top:0 left:0 right:0 bottom:0 */
+    
+    margin: 11.8vw 11.5vw; /* ye magic hai */
+    
+    width: 10vw;
+    height: 10vw;
+    border-radius: 50%;
+ background-color:#EAEAEA ;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+   
+}
+#layers{
+   width: 100vw; 
+   height: 100vh;
+   position: absolute;
+   top: 0%;
+   background-color:transparent;
+   z-index: 5;
+   display: flex;
+}
+#layer1{
+    width: 50vw;
+    height: 100vh;
+    background-color: #c6c4c4 ;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+}
+#layer2{
+    width: 50vw;
+    height: 100vh;
+    background-color: #c6c4c4;
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    
+}
+#layerlock{
+    width: 15vw;
+    height: 15vw;
+    border-radius: 50%;
+    background-color: #3C3C3C;
+  position: absolute;
+top: 50%;
+left:50%;
+transform: translate(-50%,-50%);
+z-index: 6;
+display: flex;
+align-items: center;
+justify-content: center;
+    
+}
+#layerlockmain{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0%;
+    background-color:transparent;
+    z-index: 6;
+    background-color: transparent;
+}
+#layerlock h1{
+    font-family: jst;
+    font-size: 3vw;
+    font-weight: 300;
+    color: #EAEAEA;
+    overflow: hidden;
+}
+#cursor{
+    width: 1vw;
+    height: 1vw;
+    background-color: #3C3C3C;
+    border-radius: 50%;
+    position: absolute;
+    top: -10%;
+    z-index: 10;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+}

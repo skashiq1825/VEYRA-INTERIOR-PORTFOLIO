@@ -1,0 +1,1082 @@
+@font-face {
+    font-family: hvl;
+    src: url(./havelock.otf);
+}
+@font-face {
+    font-family: crn;
+    src: url(./Corinthia-Regular.ttf);
+}
+@font-face {
+    font-family: lst;
+    src: url(./LuxuriousScript-Regular.ttf);
+}
+@font-face {
+    font-family: atl;
+    src: url(./attila.ttf);
+}
+
+@font-face {
+    font-family: dnc;
+    src: url(./DancingScript-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: rog;
+    src: url(./RougeScript-Regular.ttf);
+}
+
+@font-face {
+    font-family: jst;
+    src: url(./Jost-Italic-VariableFont_wght.ttf);
+}
+
+
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+#pro {
+    width: 100vw;
+    position: relative;
+    /* overflow-x: hidden; */
+    /* background-color: green; */
+    height: 960vh;
+}
+
+#fst {
+    width: 100vw;
+    height: 425vh;
+    position: absolute;
+    background-color: #F6F6F6;
+    top: 0%;
+}
+
+#scnd {
+    position: absolute;
+    background-color: #F6F6F6;
+    width: 100vw;
+    height: 400vh;
+    top: 565vh;
+
+
+}
+
+#mid {
+    background-color: #F6F6F6;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 325vh;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    background-image: url(./res1livin/living7.webp);
+    background-position: center;
+    background-size: cover;
+}
+
+#nav {
+    width: 100vw;
+    height: 10vh;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 35px;
+    font-family: montserrat;
+
+}
+
+#nav h4 {
+    font-weight: 500;
+}
+
+#front-image {
+    width: 26.7vw;
+    height: 90vh;
+    background-color: red;
+    background-image: url(./res1bed/Bedroom\(4\).webp);
+    background-size: cover;
+    background-position: 78% 0%;
+    position: absolute;
+    top: 8vh;
+    left: 50%;
+}
+
+#round {
+    width: 37vw;
+    height: 37vw;
+    position: absolute;
+    background-color: #ebe9e9;
+    
+    border-radius: 50%;
+    top: 18vh;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+#front-text {
+    position: absolute;
+    white-space: nowrap;
+    top: 30vh;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    opacity: 1;
+
+
+}
+
+#front-text h1 {
+    font-family: montserrat;
+    font-size: 8.9vw;
+    color: #2E2E2E;
+    font-weight: 370;
+    letter-spacing: -9px;
+
+}
+
+#front-text h2 {
+    font-family: dnc;
+    font-size: 8.40vw;
+    font-weight: 400;
+    color: #2E2E2E;
+
+    margin-top: -20px;
+}
+
+#detail {
+    font-size: 2.4vw;
+    font-family: jst;
+    position: absolute;
+    left: 50%;
+    top: 115vh;
+    transform: translate(-50%, 0%);
+    white-space: nowrap;
+}
+
+#detail h1 {
+    font-weight: 300;
+}
+
+#paragraph {
+    width: 20vw;
+    height: 30vh;
+
+    font-family: gilroy;
+    font-size: 0.9vw;
+    line-height: 1.5vw;
+    position: absolute;
+    left: 50%;
+    top: 130vh;
+}
+
+.frame {
+    width: 46vw;
+    height: 52vw;
+    background-color: transparent;
+
+    position: absolute;
+    left: 35px;
+    top: 190vh;
+
+
+}
+
+.im {
+    width: 100%;
+    height: 80%;
+    background-color: transparent;
+    background-image: url(./res1livin/living7.webp);
+    background-position: center;
+    background-size: cover;
+}
+
+.det {
+    width: 100%;
+    height: 5%;
+    background-color: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 80px;
+    color: #3C3C3C;
+}
+
+.det2 {
+    width: 100%;
+    height: 5%;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.det h2 {
+    font-family: montserrat;
+    font-size: .8vw;
+    font-weight: 500;
+    margin-left: 3px;
+
+
+}
+
+.det h3 {
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: .7vw;
+}
+
+.det2 h3 {
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: .7vw;
+    color: #3C3C3C;
+
+}
+
+
+.frame2 {
+    width: 40vw;
+    height: 35.2vw;
+    background-color: transparent;
+
+    position: absolute;
+    left: 49.4vw;
+    top: 190vh;
+
+
+}
+
+.im2 {
+    width: 100%;
+    height: 80%;
+    background-color: transparent;
+    background-image: url(./res1bed/Bedroom\(6\).webp);
+    background-position: center;
+    background-size: cover;
+}
+
+.det3 {
+    width: 100%;
+    height: 5%;
+    background-color: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 80px;
+    color: #3C3C3C;
+}
+
+.det4 {
+    width: 100%;
+    height: 5%;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.det3 h2 {
+    font-family: montserrat;
+    font-size: .8vw;
+    font-weight: 500;
+    margin-left: 3px;
+
+
+}
+
+.det3 h3 {
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: .7vw;
+}
+
+.det4 h3 {
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: .7vw;
+    color: #3C3C3C;
+
+}
+
+.frame3 {
+    width: 24vw;
+    height: 45vw;
+    background-color: transparent;
+
+    position: absolute;
+    left: 70vw;
+    top: 165vh;
+
+
+}
+
+.im3 {
+    width: 100%;
+    height: 80%;
+    background-color: transparent;
+    background-image: url(./res1bath/washroom\(3\).webp);
+    background-position: 37% 0;
+    background-size: cover;
+}
+
+.det5 {
+    width: 100%;
+    height: 0%;
+    background-color: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 80px;
+    color: #3C3C3C;
+}
+
+.det6 {
+    width: 100%;
+    height: 10%;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.det5 h2 {
+    font-family: montserrat;
+    font-size: .8vw;
+    font-weight: 500;
+    margin-left: 3px;
+
+
+}
+
+.det5 h3 {
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: .7vw;
+}
+
+.det6 h3 {
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: .7vw;
+    color: #3C3C3C;
+
+}
+
+#layer {
+    background-color: #ebe9e9;
+    width: 100vw;
+    height: 120vh;
+    position: absolute;
+    z-index: 5;
+    top: 0%;
+}
+
+#txt1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 285vh;
+    height: 150px;
+    /* background-color: aqua; */
+    white-space: nowrap;
+    /* background-color: rgb(155, 56, 247); */
+    overflow: hidden;
+    padding: 0px 22px;
+    letter-spacing: -5px;
+}
+
+#txt1 h1 {
+    font-size: 6.5vw;
+    font-family: montserrat;
+    font-weight: 370;
+    color: #2E2E2E;
+}
+
+#txt1 span {
+    color: #bdbcba;
+    font-family: crn;
+    font-size: 11.7vw;
+    letter-spacing: 1.2px;
+}
+
+.txt-1 {
+
+    margin-top: 265px;
+
+}
+
+#txt2 {
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    position: absolute;
+    top: 297vh;
+    width: 100vw;
+    height: 100px;
+    /* background-color: rgb(155, 56, 247); */
+    overflow-y: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+#txt2 h1 {
+    font-size: 6.5vw;
+    font-family: montserrat;
+    font-weight: 370;
+    color: #ffffff;
+    overflow-x: auto;
+    display: inline-block;
+}
+
+#txt2::-webkit-scrollbar {
+    display: none;
+}
+
+.txt-2 {
+
+    margin-top: 190px;
+
+}
+
+#txt3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 307vh;
+    height: 100px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    /* background-color: rgb(155, 56, 247); */
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#txt3 h1 {
+    font-size: 6.5vw;
+    font-family: montserrat;
+    font-weight: 370;
+    color: #2E2E2E;
+}
+
+.txt-3 {
+
+    margin-top: 190px;
+
+}
+
+#txt4 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 317vh;
+    height: 100px;
+    left: 50%;
+    /* transform: translate(-50%,0%); */
+    /* background-color: rgb(155, 56, 247); */
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#txt4 h1 {
+    font-size: 6.5vw;
+    font-family: montserrat;
+    font-weight: 370;
+    color: #2E2E2E;
+}
+
+.txt-4 {
+
+    margin-top: 190px;
+
+}
+
+#autocad {
+    width: 49vw;
+    height: 44vw;
+    background-image: url(./autocad.jpeg);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    bottom: 3vh;
+    left: 50%;
+    background-color: white;
+}
+
+#round2 {
+    width: 25vw;
+    height: 25vw;
+    position: absolute;
+    background-color: #ebe9e9;
+    border-radius: 50%;
+    bottom: 100vh;
+    left: 38%;
+    transform: translate(-50%, 0%);
+    scale: 0;
+}
+
+#final {
+    width: 7.5vw;
+    height: 7.5vw;
+    /* background-color: red; */
+    border-radius: 50%;
+    position: absolute;
+    bottom: 68vh;
+    right: 41vw;
+    background-image: url(./autocad/final\ drwing.png);
+    background-position: center;
+    background-size: cover;
+    animation-name: ghum;
+    animation-duration: 9s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+
+}
+
+@keyframes ghum {
+    100% {
+        rotate: 360deg;
+    }
+}
+
+#round3 {
+    width: 45vw;
+    height: 45vw;
+    position: absolute;
+    /* background-color:#EBE3CF; */
+    background-color: #F6F6F6;
+    border-radius: 50%;
+    bottom: 5vh;
+    left: 2vw;
+    border: 1px solid #bdbcba;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+
+}
+
+#ltxt1 h2 {
+    font-family: jst;
+    font-size: 12vw;
+    font-weight: 320;
+}
+
+#ltxt1 {
+    overflow: hidden;
+    width: 40vw;
+    height: 30vh;
+
+    text-align: center;
+    position: relative;
+    color: #2E2E2E;
+}
+
+.ltxt-1 {
+    position: absolute;
+    top: 130%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#ltxt2 h2 {
+    font-family: voyage;
+    font-size: 1.4vw;
+    font-weight: 390;
+    text-transform: uppercase;
+}
+
+#ltxt2 {
+    overflow: hidden;
+    width: 40vw;
+    height: 5vh;
+
+    text-align: center;
+    position: relative;
+    color: #2E2E2E;
+}
+
+.ltxt-2 {
+    position: absolute;
+    top: 120%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#lf {
+    width: 17vw;
+    height: 17vw;
+    background-color: transparent;
+    position: absolute;
+    bottom: 67vh;
+    background-image: url(./phool.png);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    rotate: 79deg;
+}
+
+#num1 {
+    font-size: 7.4vw;
+    font-family: jst;
+    /* background-color: red; */
+    display: inline-block;
+    left: 22.7vw;
+    top: 17vw;
+    position: absolute;
+    z-index: 1;
+    opacity: 1;
+
+}
+
+#num1 h5 {
+    font-weight: 300;
+    color: #fff;
+}
+
+.ln {
+    width: 6vw;
+    height: 3px;
+    background-color: #fff;
+    margin-top: -20px;
+}
+
+#num2 {
+    font-size: 7.1vw;
+    font-family: jst;
+    /* background-color: red; */
+    display: inline-block;
+    left: 39.7vw;
+    top: 35.4vw;
+    position: absolute;
+    z-index: 1;
+
+
+}
+
+#num2 h5 {
+    font-weight: 300;
+    color: #fff;
+}
+
+#num3 {
+    font-size: 7vw;
+    font-family: jst;
+    /* background-color: red; */
+    display: inline-block;
+    left: 58.7vw;
+    top: 24vw;
+    position: absolute;
+    z-index: 1;
+
+
+}
+
+#num3 h5 {
+    font-weight: 300;
+    color: #fff;
+}
+
+#box1 {
+    width: 17.5vw;
+    height: 50vh;
+    background-color: #F2ECDE;
+    position: absolute;
+    top: 6vw;
+    left: 15vw;
+    opacity: 0;
+    /* z-index: 2; */
+    padding: 3vw;
+
+}
+
+#box2 {
+    width: 17.5vw;
+    height: 50vh;
+    background-color: #F2ECDE;
+    position: absolute;
+    top: 16vw;
+    left: 36.5vw;
+    opacity: 0;
+    /* z-index: 2; */
+    padding: 3vw;
+
+
+}
+
+#box3 {
+    width: 17.5vw;
+    height: 50vh;
+    background-color: #F2ECDE;
+    position: absolute;
+    top: 5vw;
+    left: 58.5vw;
+    opacity: 0;
+    /* z-index: 2; */
+    padding: 3vw;
+
+
+}
+
+.bg {
+    width: 5vw;
+    height: 5vw;
+    background-color: grey;
+}
+
+.title {
+    margin-top: 2.2vw;
+    font-family: montserrat;
+}
+
+.info {
+    margin-top: 0.8vw;
+}
+
+.nm {
+    margin-top: 2.4vw;
+    font-size: 7.1vw;
+    font-family: jst;
+    margin-left: -0.6vw;
+
+
+}
+
+.nm h5 {
+    font-weight: 300;
+
+}
+
+#pehla{
+    width: 40vw;
+    height: 31.5vw;
+    /* background-color: rgb(238, 204, 204); */
+    position: relative;
+    top: 10vw;
+    left: 11vw;
+    cursor: pointer;
+    overflow: hidden;
+
+}
+#pehla-image{
+     width: 100%;
+    height: 26.5vw;
+     background-position: center;
+     position: absolute;
+     top: 0%;
+     left: 0%;
+    background-size: cover;
+    /* background-image: url(./res1bed/grey\ bedroom\ \(6\).png); */
+    /* opacity: 1; */
+}
+
+
+#pehla-image-next{
+     width: 100%;
+    height: 26.5vw;
+     background-position: center;
+     position: absolute;
+     top: 0%;
+     left: 0%;
+    background-size: cover;
+    /* background-image: url(./res1bed/grey\ bedroom\ \(6\).png); */
+    opacity: 0;
+}
+
+
+.otxt{
+    width: 100%;
+    height: 5vw;
+    background-color: rgba(232, 171, 171, 0.089);
+    display: flex;
+    position: absolute;
+    bottom: 0vw;
+    /* justify-content: center; */
+    align-items: center;
+    padding-left: 60px;
+}
+
+
+#dusra {
+    width: 60vw;
+    height: 37.5vw;
+    /* background-color: red; */
+  
+    top: 50vw;
+    left: 38vw;
+    cursor: pointer;
+    overflow: hidden;
+      position: absolute;
+ 
+}
+
+
+#dusra-image{
+     width: 60vw;
+    height: 32.5vw;
+     background-position: center;
+    background-size: cover;
+    /* background-image: url(./boho/Port\ Pro\ 1\ \(1\).png); */
+    position: absolute;
+    top: 0%;
+    left: 0%;
+}
+
+
+#dusra-image-next{
+     width: 100%;
+    height: 32.5vw;
+     background-position: center;
+     position: absolute;
+     top: 0%;
+     left: 0%;
+    background-size: cover;
+    /* background-image: url(./res1kids/kids\(1\).png); */
+    opacity: 0;
+}
+
+
+#teesra {
+    width: 27vw;
+    height: 50vw;
+    /* background-color: red; */
+   cursor: pointer;
+    overflow: hidden;
+      position: absolute;
+    top: 93vw;
+    left: 11vw;
+}
+
+
+#teesra-image{
+     width: 100%;
+    height: 45vw;
+       background-position: center;
+    background-size: cover;
+    top: 0%;
+     left: 0%;
+}
+
+
+#teesra-image-next{
+     width: 100%;
+    height: 45vw;
+     background-position: center;
+     position: absolute;
+     top: 0%;
+     left: 0%;
+    background-size: cover;
+    /* background-image: url(./res1bed/grey\ bedroom\ \(6\).png); */
+    opacity: 0;
+}
+
+
+#chautha {
+    width: 40vw;
+    height: 31.5vw;
+    /* background-color: red; */
+   cursor: pointer;
+    overflow: hidden;
+      position: absolute;
+    top: 111vw;
+    left: 50vw;
+  
+}
+
+
+#chautha-image{
+     background-position: center;
+    background-size: cover;
+   
+     width: 100%;
+    height: 26.5vw;
+     top: 0%;
+     left: 0%;
+}
+
+
+#chautha-image-next{
+     width: 100%;
+    height: 26.5vw;
+     background-position: center;
+     position: absolute;
+     top: 0%;
+     left: 0%;
+    background-size: cover;
+    /* background-image: url(./res1bed/grey\ bedroom\ \(6\).png); */
+    opacity: 0;
+}
+
+
+#gmail{
+    font-size: 3vw;
+    font-family: jst;
+    position: absolute;
+    bottom: 35vh;
+    left: 50%;
+    transform: translate(-50%,0%);
+}
+
+
+#gmail h1{
+    color: #2E2E2E;
+    font-weight: 400;
+}
+
+
+#lowergola{
+    width: 27vw;
+    height: 27vw;
+    border-radius: 50%;
+    background-color:  #ebe9e9;
+   position: absolute;
+   left: 50%;
+   transform: translate(-50%,0%);
+   bottom: 17.5vh;
+   /* scale: 2; */
+}
+
+
+#footnav {
+    width: 100vw;
+    height: 10vh;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 35px;
+    font-family: montserrat;
+    position: absolute;
+    bottom: 1%;
+
+}
+
+
+#footnav h4 {
+    font-weight: 500;
+}
+
+
+#lowleaf{
+    position: absolute;
+    width: 13vw;
+    height: 13vw;
+    background-image: url(./phool\ 2.png);
+    background-size: cover;
+    background-position: center;
+    bottom: 50vh;
+      left: 60%;
+   transform: translate(-50%,0%);
+
+}
+
+
+#lf {
+    /* Dimensions */
+    width: 17vw;
+    height: 17vw;
+    
+    /* 1. Yahan woh color likhein jo aap chahte hain */
+    background-color: #bdbcba; 
+
+    /* 2. Masking properties */
+    -webkit-mask-image: url('./phool.png');
+    mask-image: url('./phool.png');
+    
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+#lf {
+    background-image: url('./phool.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    
+    /* Color change karne ke liye */
+    filter: brightness(0) saturate(100%) invert(80%) sepia(5%) saturate(145%) hue-rotate(30deg) brightness(95%);
+}
+
+/* #lowleaf{
+    position: absolute;
+    width: 13vw;
+    height: 13vw;
+    background-image: url(./phool\ 2.png);
+    background-size: cover;
+    background-position: center;
+    bottom: 50vh;
+      left: 60%;
+   transform: translate(-50%,0%);
+
+} */
+#lowleaf{
+    /* Dimensions */
+     position: absolute;
+    width: 13vw;
+    height: 13vw;
+  
+    bottom: 50vh;
+      left: 60%;
+   transform: translate(-50%,0%);
+    
+    
+    /* 1. Yahan woh color likhein jo aap chahte hain */
+    background-color: #bdbcba; 
+
+    /* 2. Masking properties */
+    -webkit-mask-image: url('./phool\ 2.png');
+    mask-image: url('./phool\ 2.png');
+    
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+#lowleaf {
+    background-image: url('./phool\ 2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    
+    /* Color change karne ke liye */
+    filter: brightness(0) saturate(100%) invert(80%) sepia(5%) saturate(145%) hue-rotate(30deg) brightness(95%);
+}
