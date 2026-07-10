@@ -235,10 +235,14 @@ pl.to("#poster", {
     scale: 1.2
 })
 
+// pl.to("#post", {
+//     scale: 1,
+//     marginTop: "52vh"
+// }, "< 0.3")
 pl.to("#post", {
     scale: 1,
-    marginTop: "52vh"
-}, "< 0.3")
+    marginTop: window.innerWidth <= 505 ? "20vh" : "52vh"
+}, "<0.3");
 
 
 
@@ -845,3 +849,7 @@ main.addEventListener("mousemove",function(dets){
     })
    
 })
+
+
+
+

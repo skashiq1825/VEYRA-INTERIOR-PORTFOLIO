@@ -568,6 +568,7 @@ body {
     height: 3.3vw;
     border-radius: 50%;
     background-color: rgb(244, 169, 169);
+   
 
 
 }
@@ -597,6 +598,7 @@ body {
     font-size: 4vw;
     font-weight: 300;
     color: #CAB193;
+    white-space: nowrap;
 }
 
 .frame {
@@ -1290,7 +1292,7 @@ body {
 #thcr{
     width: 17.5vw;
     height: 17.5vw;
-    background-color: #EAEAEA;
+    background-color: #E5EEE4;;
     border-radius: 50%;
     left: 50%;
     top: 80%;
@@ -1298,7 +1300,7 @@ body {
 #thc{
     width: 17.5vw;
     height: 17.5vw;
-    background-color: #EAEAEA;
+    background-color: #E5EEE4;;
     border-radius: 50%;
     left: 50%;
     top: 80%;
@@ -1319,6 +1321,96 @@ body {
     left: 30%;
     top: 14.72vh;
 
+}
+#poster {
+    width: 32vw;
+    position: absolute;
+    height: 40vw;
+    background-color: red;
+    z-index: 4;
+    margin-top: 18vh;
+    margin-left: 6vh;
+    background-image: url(./res1kids/kids\ room\ desk\ corner.webp);
+
+    background-position: center;
+    background-size: cover;
+}
+#post {
+    width: 23vw;
+    height: 22vh;
+    /* background-color: red; */
+    position: absolute;
+    margin-top: 45vh;
+    margin-left: 1vh;
+    z-index: 4;
+    background-image: url(./res1livin/living8.webp);
+    background-position: 30% 10%;
+    background-size: cover;
+}
+
+#info {
+
+    display: flex;
+    flex-direction: column;
+    font-family: montserrat;
+    position: absolute;
+    margin-top: 17vh;
+    margin-left: 27vh;
+    width: 30%;
+
+}
+
+#info h1 {
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 6.8vw;
+    letter-spacing: -2px;
+    color: #3C3C3C;
+    line-height: 9vw;
+
+}
+
+#info h1:nth-child(3) {
+    margin-top: 4.8vw;
+    margin-bottom: 1.5vw;
+}
+
+#invsbl {
+    width: 100vw;
+    height: 10vh;
+    background-color: transparent;
+    position: absolute;
+    top: 130%;
+    overflow: hidden;
+    
+}
+#info p {
+    width: 50vw;
+    font-size: 2.8vw;
+    margin-left: 4px;
+    line-height: 3vw;
+    font-weight: 400;
+}
+#sym {
+    width: 230vw;
+    height: 8vw;
+    position: absolute;
+    top: 0%;
+    left: -1%;
+    background-color: transparent;
+    border: 2px solid #CAB193;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    z-index: 11;
+}
+#front {
+    width: 100vw;
+    height: 500vh;
+    /* background-color: #F5EFE1; */
+    background-color: red;
+    margin-top: 80vh;
+    position: relative;
 }
 
 }
