@@ -150,7 +150,7 @@ var cl = gsap.timeline({
         trigger: "#three",
         scroller: "#main",
         scrub: 1,
-        // markers:true,
+        markers:true,
         start: "top 50%",
 
 
@@ -160,23 +160,34 @@ var cl = gsap.timeline({
 
 
 cl.to("#ocr", {
-    top: "115.6vh",
+    // top: "115.6vh",
 //    left:"37%",
-    x:"27vw",
+    // x:"27vw",
+   top: window.innerWidth <= 505 ? "100vh" : "115.6vh",
+   x: window.innerWidth <= 505 ? "15vw" : "27vw",
+   zIndex: window.innerWidth <= 505 ? "4" : "3",
+
     scale: 3.9,
-    zIndex: 3,
+    // zIndex: 5,
     overwrite: "auto"
 });
 
 cl.to("#tcr", {
-    top: "134%",
-    left: "34%",
+   top: window.innerWidth <= 505 ? "114%" : "134%",
+
+    // top: "134%",
+    // left: "34%",
+   left: window.innerWidth <= 505 ? "24%" : "34%",
+
     scale: 2.7
 
 }, "<")
 cl.to("#thcr", {
-    top: "130%",
-    left: "34%",
+    // top: "130%",
+   top: window.innerWidth <= 505 ? "107%" : "134%",
+   left: window.innerWidth <= 505 ? "28%" : "34%",
+
+    // left: "34%",
     scale: 2
 
 }, "<")
@@ -452,35 +463,92 @@ elements.forEach((el) => {
 // 1. PINNING: Yeh sirf elements ko wahi rok ke rakhega
 
 // // 2. ANIMATION (Left/Right/Top): Yeh wahi arrangement karega jo tune bola
+const isMobile = window.innerWidth <= 768;
+
+if (!isMobile) {
+
 let goo = gsap.timeline({
     scrollTrigger: {
         trigger: ".frame2",
         scroller: "#main",
-        start: "top 75%",    // Same start point
-        end: "top -183%",    // Same end point
-        scrub: 3,            // "1" dene se thoda smooth animation aayega (premium feel)
-
+        start: "top 75%",
+        end: "top -183%",
+        scrub: 3,
     }
 });
 
 goo.to("#p", {
-    // Left move
     top: "23vh",
-    left: "21.5vw"              // #ect ke level par laane ke liye (apne hisab se value set kar lo)
-
+    left: "21.5vw"
 }, "<")
-    .to("#roj", {
-        // Right move
-        top: "22vh",
-        left: "6.2vw"             // Same top value as #ect
 
-    }, "<")
-   .to("#s", {
+.to("#roj", {
+    top: "22vh",
+    left: "6.2vw"
+}, "<")
+
+.to("#s", {
     top: "22vh",
     right: "20vw",
-    left: "initial", 
-    
+    left: "initial",
 }, "<")
+
+}
+if (isMobile) {
+
+let mobileGoo = gsap.timeline({
+    scrollTrigger: {
+        trigger: ".frame2",
+        scroller: "#main",
+        start: "top 75%",
+        end: "top -183%",
+        scrub: 3,
+    }
+});
+
+mobileGoo.to("#p", {
+    top: "2vh",
+    left: "20vw"
+}, "<")
+
+.to("#roj", {
+    top: "2vh",
+    left: "6.2vw"
+}, "<")
+
+.to("#ect", {
+    top: "1.6vh",
+    
+    left: "5vw",
+}, "<")
+
+.to("#s", {
+    top: "1.5vh",
+    right: "7.8vw",
+    left: "initial",
+}, "<")
+
+}
+
+
+
+// goo.to("#p", {
+//     top: isMobile ? "10vh" : "23vh",
+//     left: isMobile ? "5vw" : "21.5vw"
+// }, "<")
+
+// .to("#roj", {
+//     top: isMobile ? "10vh" : "22vh",
+//     left: isMobile ? "18vw" : "6.2vw"
+// }, "<")
+
+
+
+// .to("#s", {
+//     top: isMobile ? "10vh" : "22vh",
+//     right: isMobile ? "5vw" : "20vw",
+//     left: "initial"
+// }, "<");
 
 
 var boom = gsap.timeline({
@@ -499,6 +567,8 @@ var boom = gsap.timeline({
 boom.to("#gola",{
     scale:0.5,
     top:"92vh",
+   
+
     //  overwrite: "auto",  
     //   immediateRender: false,
     backgroundColor:"#B8C7B3"
@@ -555,9 +625,13 @@ gsap.to("#ocr", {
     scrollTrigger: {
         trigger: "#sym", // Poster ke bottom se hi pinning start karein
         scroller: "#main",
-        start: "top 17%", // Same starting point as magic swap
+        // start: "top 17%",
+        start: () => window.innerWidth <= 505 ? "top -15%" : "top 17%",
+
+        //  // Same starting point as magic swap
         // endTrigger: "#sym1", // Jahan tak le jana hai
-        end: "top -258%",
+        // end: "top -258%",
+        end: () => window.innerWidth <= 505 ? "top -150%" : "top -258%",
         pin: "#ocr",
         pinSpacing: false,
         scrub: true,
