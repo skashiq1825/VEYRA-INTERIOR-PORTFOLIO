@@ -8,6 +8,18 @@ const locoScroll = new LocomotiveScroll({
     lerp: 0.05,
     multiplier: 0.6,
     firefoxMultiplier: 50,
+    // FIX 1: mobile/tablet ke liye alag behavior — transform-hijack + touch scroll
+    // conflict hi laggy/unresponsive feel ki sabse badi wajah hoti hai.
+    // Pehle smooth:false try karo (native scroll, sabse stable).
+    // Agar mobile pe smooth scroll hi chahiye to neeche smooth:true kar dena,
+    // lekin phir lerp thoda badha dena (0.1 - 0.15).
+    smartphone: {
+        smooth: false
+    },
+    tablet: {
+        smooth: false,
+        breakpoint: 768
+    }
 });
 // each time Locomotive Scroll updates, tell ScrollTrigger to update too (sync positioning)
 locoScroll.on("scroll", ScrollTrigger.update);
@@ -462,93 +474,77 @@ elements.forEach((el) => {
 
 // 1. PINNING: Yeh sirf elements ko wahi rok ke rakhega
 
-// // 2. ANIMATION (Left/Right/Top): Yeh wahi arrangement karega jo tune bola
-const isMobile = window.innerWidth <= 768;
+// 2. ANIMATION (Left/Right/Top)
+// FIX 2: isMobile ab sirf ek baar page-load pe calculate nahi hota —
+// ScrollTrigger.matchMedia() use kar rahe hain taaki resize / orientation
+// change (jo mobile pe address-bar show-hide se bhi trigger hota hai)
+// pe ye automatically sahi timeline re-create kare.
+ScrollTrigger.matchMedia({
+    "(min-width: 769px)": function () {
 
-if (!isMobile) {
+        let goo = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".frame2",
+                scroller: "#main",
+                start: "top 75%",
+                end: "top -183%",
+                scrub: 3,
+            }
+        });
 
-let goo = gsap.timeline({
-    scrollTrigger: {
-        trigger: ".frame2",
-        scroller: "#main",
-        start: "top 75%",
-        end: "top -183%",
-        scrub: 3,
+        goo.to("#p", {
+            top: "23vh",
+            left: "21.5vw"
+        }, "<")
+
+        .to("#roj", {
+            top: "22vh",
+            left: "6.2vw"
+        }, "<")
+
+        .to("#s", {
+            top: "22vh",
+            right: "20vw",
+            left: "initial",
+        }, "<")
+
+    },
+
+    "(max-width: 768px)": function () {
+
+        let mobileGoo = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".frame2",
+                scroller: "#main",
+                start: "top 75%",
+                end: "top -183%",
+                scrub: 3,
+            }
+        });
+
+        mobileGoo.to("#p", {
+            top: "2vh",
+            left: "20vw"
+        }, "<")
+
+        .to("#roj", {
+            top: "2vh",
+            left: "6.2vw"
+        }, "<")
+
+        .to("#ect", {
+            top: "1.6vh",
+            left: "5vw",
+        }, "<")
+
+        .to("#s", {
+            top: "1.5vh",
+            right: "7.8vw",
+            left: "initial",
+        }, "<")
+
     }
 });
-
-goo.to("#p", {
-    top: "23vh",
-    left: "21.5vw"
-}, "<")
-
-.to("#roj", {
-    top: "22vh",
-    left: "6.2vw"
-}, "<")
-
-.to("#s", {
-    top: "22vh",
-    right: "20vw",
-    left: "initial",
-}, "<")
-
-}
-if (isMobile) {
-
-let mobileGoo = gsap.timeline({
-    scrollTrigger: {
-        trigger: ".frame2",
-        scroller: "#main",
-        start: "top 75%",
-        end: "top -183%",
-        scrub: 3,
-    }
-});
-
-mobileGoo.to("#p", {
-    top: "2vh",
-    left: "20vw"
-}, "<")
-
-.to("#roj", {
-    top: "2vh",
-    left: "6.2vw"
-}, "<")
-
-.to("#ect", {
-    top: "1.6vh",
-    
-    left: "5vw",
-}, "<")
-
-.to("#s", {
-    top: "1.5vh",
-    right: "7.8vw",
-    left: "initial",
-}, "<")
-
-}
-
-
-
-// goo.to("#p", {
-//     top: isMobile ? "10vh" : "23vh",
-//     left: isMobile ? "5vw" : "21.5vw"
-// }, "<")
-
-// .to("#roj", {
-//     top: isMobile ? "10vh" : "22vh",
-//     left: isMobile ? "18vw" : "6.2vw"
-// }, "<")
-
-
-
-// .to("#s", {
-//     top: isMobile ? "10vh" : "22vh",
-//     right: isMobile ? "5vw" : "20vw",
-//     left: "initial"
-// }, "<");
 
 
 var boom = gsap.timeline({
@@ -885,11 +881,15 @@ window.addEventListener("load", function() {
 });
 
 
-let scrollTimeout;
-window.addEventListener("scroll", () => {
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-       
+// FIX 3: pehle ye har SCROLL event pe ScrollTrigger.refresh() chala raha tha —
+// jo mobile pe (kam powerful CPU/GPU) bohot heavy operation hai aur locomotive
+// ke momentum scroll ke saath milke jitter/lag create karta tha.
+// Ab refresh sirf window RESIZE (orientation change / address-bar toggle) pe
+// hoga, scroll pe nahi.
+let resizeTimeout;
+window.addEventListener("resize", () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
         ScrollTrigger.refresh();
     }, 200);
 });
@@ -923,7 +923,3 @@ main.addEventListener("mousemove",function(dets){
     })
    
 })
-
-
-
-
