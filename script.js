@@ -456,20 +456,31 @@ ek.from(["#p", "#roj", "#ect", "#s"], {
 
 const elements = ["#p", "#roj", "#ect", "#s"];
 
-elements.forEach((el) => {
-    gsap.to(el, {
-        scrollTrigger: {
-            trigger: ".frame2",
-            scroller: "#main",
-            start: "top 80%",
-            end: "top -186%",
-            pin: el, // Har element individually pin hoga
-            pinSpacing: false,
-            scrub: true,
-            invalidateOnRefresh: true,
-            // markers: true
-        }
-    });
+// FIX 4: 4 alag elements ko individually position:fixed se pin karna
+// (khaas kar Locomotive Scroll ke saath) exactly is area (.frame2 / #front)
+// mein jitter/freeze de raha tha, kyunki har pin apna khud ka fixed
+// recalculation karta hai aur locomotive ke transform-scroll se clash karta hai.
+// Ab ye individual pinning sirf DESKTOP pe chalegi. Mobile pe pin hata diya hai —
+// mobileGoo timeline (neeche wali matchMedia mein) already scrub se position
+// control kar rahi hai, isliye pin ki zaroorat nahi hai mobile pe.
+ScrollTrigger.matchMedia({
+    "(min-width: 769px)": function () {
+        elements.forEach((el) => {
+            gsap.to(el, {
+                scrollTrigger: {
+                    trigger: ".frame2",
+                    scroller: "#main",
+                    start: "top 80%",
+                    end: "top -186%",
+                    pin: el, // Har element individually pin hoga
+                    pinSpacing: false,
+                    scrub: true,
+                    invalidateOnRefresh: true,
+                    // markers: true
+                }
+            });
+        });
+    }
 });
 
 // 1. PINNING: Yeh sirf elements ko wahi rok ke rakhega
