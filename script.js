@@ -176,7 +176,7 @@ cl.to("#ocr", {
 //    left:"37%",
     // x:"27vw",
    top: window.innerWidth <= 505 ? "100vh" : "115.6vh",
-   x: window.innerWidth <= 505 ? "15vw" : "27vw",
+   x: window.innerWidth <= 505 ? "50%" : "27vw",
    zIndex: window.innerWidth <= 505 ? "4" : "3",
 
     scale: 3.9,
@@ -456,13 +456,7 @@ ek.from(["#p", "#roj", "#ect", "#s"], {
 
 const elements = ["#p", "#roj", "#ect", "#s"];
 
-// FIX 4: 4 alag elements ko individually position:fixed se pin karna
-// (khaas kar Locomotive Scroll ke saath) exactly is area (.frame2 / #front)
-// mein jitter/freeze de raha tha, kyunki har pin apna khud ka fixed
-// recalculation karta hai aur locomotive ke transform-scroll se clash karta hai.
-// Ab ye individual pinning sirf DESKTOP pe chalegi. Mobile pe pin hata diya hai —
-// mobileGoo timeline (neeche wali matchMedia mein) already scrub se position
-// control kar rahi hai, isliye pin ki zaroorat nahi hai mobile pe.
+
 ScrollTrigger.matchMedia({
     "(min-width: 769px)": function () {
         elements.forEach((el) => {
@@ -490,73 +484,67 @@ ScrollTrigger.matchMedia({
 // ScrollTrigger.matchMedia() use kar rahe hain taaki resize / orientation
 // change (jo mobile pe address-bar show-hide se bhi trigger hota hai)
 // pe ye automatically sahi timeline re-create kare.
-ScrollTrigger.matchMedia({
-    "(min-width: 769px)": function () {
+if (window.innerWidth > 768) {
 
-        let goo = gsap.timeline({
-            scrollTrigger: {
-                trigger: ".frame2",
-                scroller: "#main",
-                start: "top 75%",
-                end: "top -183%",
-                scrub: 3,
-            }
-        });
+    let goo = gsap.timeline({
+        scrollTrigger: {
+            trigger: ".frame2",
+            scroller: "#main",
+            start: "top 75%",
+            end: "top -183%",
+            scrub: 3,
+        }
+    });
 
-        goo.to("#p", {
-            top: "23vh",
-            left: "21.5vw"
-        }, "<")
+    goo.to("#p", {
+        top: "23vh",
+        left: "21.5vw"
+    }, "<")
 
-        .to("#roj", {
-            top: "22vh",
-            left: "6.2vw"
-        }, "<")
+    .to("#roj", {
+        top: "22vh",
+        left: "6.2vw"
+    }, "<")
 
-        .to("#s", {
-            top: "22vh",
-            right: "20vw",
-            left: "initial",
-        }, "<")
+    .to("#s", {
+        top: "22vh",
+        right: "20vw",
+        left: "initial",
+    }, "<");
 
-    },
+} else {
 
-    "(max-width: 768px)": function () {
+    let mobileGoo = gsap.timeline({
+        scrollTrigger: {
+            trigger: ".frame2",
+            scroller: "#main",
+            start: "top 75%",
+            end: "top -183%",
+            scrub: 3,
+        }
+    });
 
-        let mobileGoo = gsap.timeline({
-            scrollTrigger: {
-                trigger: ".frame2",
-                scroller: "#main",
-                start: "top 75%",
-                end: "top -183%",
-                scrub: 3,
-            }
-        });
+    mobileGoo.to("#p", {
+        top: "280vh",
+        left: "13vw"
+    }, "<")
 
-        mobileGoo.to("#p", {
-            top: "2vh",
-            left: "20vw"
-        }, "<")
+    .to("#roj", {
+        top: "280vh",
+        left: "-0.8vw"
+    }, "<")
 
-        .to("#roj", {
-            top: "2vh",
-            left: "6.2vw"
-        }, "<")
+    .to("#ect", {
+        top: "280vh",
+        left: "-2vw",
+    }, "<")
 
-        .to("#ect", {
-            top: "1.6vh",
-            left: "5vw",
-        }, "<")
-
-        .to("#s", {
-            top: "1.5vh",
-            right: "7.8vw",
-            left: "initial",
-        }, "<")
-
-    }
-});
-
+    .to("#s", {
+        top: "280vh",
+        right: "14.8vw",
+        left: "initial",
+    }, "<");
+}
 
 var boom = gsap.timeline({
     scrollTrigger:{
@@ -625,10 +613,7 @@ bom.to("#ocr", {
 
 
 gsap.to("#ocr", {
-    // y: 50,
-    // x:"36vw",
-    // xPercent:-100,
-//   x: "+=13vw",
+//    left:"50%",
     scrollTrigger: {
         trigger: "#sym", // Poster ke bottom se hi pinning start karein
         scroller: "#main",
@@ -786,10 +771,14 @@ var ch = gsap.timeline({
 });
 ch.to("#ocr",{
      top: "219.5vh",
-    left: "9vw",
-    xPercent: -50,
+   
+    left: window.innerWidth <= 505 ? "" : "9vw",
+
+   
+   xPercent: window.innerWidth <= 505 ? "-25" : "-50",
+
     ease: "none",
-    // immediateRender: false,
+    
 })
 
 
