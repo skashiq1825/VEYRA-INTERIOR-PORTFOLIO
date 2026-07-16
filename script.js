@@ -1,261 +1,199 @@
+/* =========================================================================
+   SETUP: GSAP + LocomotiveScroll + ScrollTrigger bridge
+   ========================================================================= */
+
 gsap.registerPlugin(ScrollTrigger);
 
 // Using Locomotive Scroll from Locomotive https://github.com/locomotivemtl/locomotive-scroll
-
 const locoScroll = new LocomotiveScroll({
     el: document.querySelector("#main"),
     smooth: true,
     lerp: 0.05,
     multiplier: 0.6,
     firefoxMultiplier: 50,
-    // FIX 1: mobile/tablet ke liye alag behavior — transform-hijack + touch scroll
-    // conflict hi laggy/unresponsive feel ki sabse badi wajah hoti hai.
-    // Pehle smooth:false try karo (native scroll, sabse stable).
-    // Agar mobile pe smooth scroll hi chahiye to neeche smooth:true kar dena,
-    // lekin phir lerp thoda badha dena (0.1 - 0.15).
-    smartphone: {
-        smooth: false
-    },
-    tablet: {
-        smooth: false,
-        breakpoint: 768
-    }
+    // Mobile/tablet: transform-hijack + native touch scroll fighting each other
+    // is the #1 cause of laggy/unresponsive feel, so smooth scroll is disabled there.
+    smartphone: { smooth: false },
+    tablet: { smooth: false, breakpoint: 768 }
 });
-// each time Locomotive Scroll updates, tell ScrollTrigger to update too (sync positioning)
-locoScroll.on("scroll", ScrollTrigger.update);
-// On mobile, Locomotive Scroll uses native scrolling, so we also listen to the window scroll event
-window.addEventListener("scroll", ScrollTrigger.update);
 
-// tell ScrollTrigger to use these proxy methods for the "#main" element since Locomotive Scroll is hijacking things
+// Detect which scroll mode is active (smooth/transform vs native).
+// Used everywhere below so we don't duplicate this check.
+function isSmoothActive() {
+    const mainEl = document.querySelector("#main");
+    return !!(mainEl && mainEl.style.transform);
+}
+
+function getScrollY() {
+    return isSmoothActive()
+        ? locoScroll.scroll.instance.scroll.y
+        : (window.pageYOffset || document.documentElement.scrollTop || 0);
+}
+
+// PERF FIX: previously both locoScroll.on("scroll", ...) AND
+// window.addEventListener("scroll", ...) called ScrollTrigger.update() —
+// on devices where both fire, that's double the work every scroll frame.
+// Smooth mode uses LocomotiveScroll's virtual scroll; native mode uses the
+// real window scroll. Only one is ever actually active, so only bind that one.
+if (isSmoothActive()) {
+    locoScroll.on("scroll", ScrollTrigger.update);
+} else {
+    window.addEventListener("scroll", ScrollTrigger.update);
+}
+
+// Tell ScrollTrigger to use LocomotiveScroll's proxy methods for "#main"
 ScrollTrigger.scrollerProxy("#main", {
     scrollTop(value) {
         if (arguments.length) {
             locoScroll.scrollTo(value, 0, 0);
         } else {
-            // Check if smooth scroll is currently active (checks if Locomotive Scroll applied transform styles)
-            const mainEl = document.querySelector("#main");
-            return (mainEl && mainEl.style.transform)
-                ? locoScroll.scroll.instance.scroll.y
-                : (window.pageYOffset || document.documentElement.scrollTop || 0);
+            return getScrollY();
         }
-    }, // we don't have to define a scrollLeft because we're only scrolling vertically.
+    }, // no scrollLeft needed — vertical scroll only
     getBoundingClientRect() {
         return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
     },
-    // LocomotiveScroll handles things completely differently on mobile devices - it doesn't even transform the container at all! So to get the correct behavior and avoid jitters, we should pin things with position: fixed on mobile. We sense it by checking to see if there's a transform applied to the container (the LocomotiveScroll-controlled element).
+    // LocomotiveScroll doesn't transform the container on mobile, so pin
+    // using position:fixed there; on desktop it uses transform.
     pinType: document.querySelector("#main").style.transform ? "transform" : "fixed"
 });
 
-
-
-
-
-
-// each time the window updates, we should refresh ScrollTrigger and then update LocomotiveScroll. 
 ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
-
-// after everything is set up, refresh() ScrollTrigger and update LocomotiveScroll because padding may have been added for pinning, etc.
 ScrollTrigger.refresh();
 
+gsap.config({
+    nullTargetWarn: false,
+    trialWarn: false
+});
 
-var oc = document.querySelector("#oc");
-var thc = document.querySelector("#thc");
-oc.addEventListener("mouseover", function () {
-    var tl = gsap.timeline();
-    tl
-        .to("#page1", {
-            backgroundColor: "transparent",
-            duration: .3
+ScrollTrigger.config({
+    limitCallbacks: true,
+    ignoreMobileResize: true,
+    syncInterval: 100
+});
 
+window.addEventListener("load", () => ScrollTrigger.refresh());
 
-        })
-        .to("#page1j", {
-            opacity: 1,
-            duration: .3
-
-
-        })
-        .to("#oc", {
-            scale: 1.2,
-            delay: -.5
-        })
-
-})
-
-oc.addEventListener("mouseleave", function () {
-    var tl = gsap.timeline();
-    tl
-        .to("#page1", {
-            backgroundColor: "transparent",
-            duration: .3
+// Only refresh ScrollTrigger on resize (orientation change / address-bar
+// toggle), never on scroll — refreshing on every scroll event is heavy and
+// was a real source of mobile jitter.
+let resizeTimeout;
+window.addEventListener("resize", () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => ScrollTrigger.refresh(), 200);
+});
 
 
-        })
-        .to("#page1j", {
-            opacity: 0,
-            duration: .3
+/* =========================================================================
+   PAGE 1: "OC" / "THC" hover buttons — background text reveal
+   ========================================================================= */
+
+const oc = document.querySelector("#oc");
+const thc = document.querySelector("#thc");
+
+oc.addEventListener("mouseover", () => {
+    gsap.timeline()
+        .to("#page1", { backgroundColor: "transparent", duration: .3 })
+        .to("#page1j", { opacity: 1, duration: .3 })
+        .to("#oc", { scale: 1.2, delay: -.5 });
+});
+
+oc.addEventListener("mouseleave", () => {
+    gsap.timeline()
+        .to("#page1", { backgroundColor: "transparent", duration: .3 })
+        .to("#page1j", { opacity: 0, duration: .3 })
+        .to("#oc", { scale: 1, delay: -.5 });
+});
+
+thc.addEventListener("mouseover", () => {
+    gsap.timeline()
+        .to("#page1", { backgroundColor: "transparent", duration: .3 })
+        .to("#page1m", { opacity: 1, duration: .3 })
+        .to("#thc", { scale: 1.2, delay: -.5 });
+});
+
+thc.addEventListener("mouseleave", () => {
+    gsap.timeline()
+        .to("#page1", { backgroundColor: "transparent", duration: .3 })
+        .to("#page1m", { opacity: 0, duration: .3 })
+        .to("#thc", { scale: 1, delay: -.5 });
+});
 
 
-        })
-        .to("#oc", {
-            scale: 1,
-            delay: -.5
-        })
-
-
-
-})
-
-
-thc.addEventListener("mouseover", function () {
-    var tl = gsap.timeline();
-    tl
-        .to("#page1", {
-            backgroundColor: "transparent",
-            duration: .3
-
-
-        })
-        .to("#page1m", {
-            opacity: 1,
-            duration: .3
-
-
-        })
-        .to("#thc", {
-            scale: 1.2,
-            delay: -.5
-        })
-})
-
-thc.addEventListener("mouseleave", function () {
-    var tl = gsap.timeline();
-    tl
-        .to("#page1", {
-            backgroundColor: "transparent",
-            duration: .3
-
-
-        })
-        .to("#page1m", {
-            opacity: 0,
-            duration: .3
-
-
-        })
-        .to("#thc", {
-            scale: 1,
-            delay: -.5
-        })
-})
-
+/* =========================================================================
+   SECTION "#three": background color shift + ocr/tcr/thcr move & scale
+   ========================================================================= */
 
 gsap.to("#main", {
     backgroundColor: "#F5EFE1",
     scrollTrigger: {
         trigger: "#three",
-
-        // markers:true,
         scroller: "#main",
         start: "top 17%",
         scrub: 3,
         onLeaveBack: () => {
             gsap.to("#main", { backgroundColor: "#f6f6f6", duration: 0.3 });
         }
-
     }
+});
 
-})
-
-var cl = gsap.timeline({
+const threeMoveTl = gsap.timeline({
     scrollTrigger: {
         trigger: "#three",
         scroller: "#main",
         scrub: 1,
-        // markers:true,
         start: "top 50%",
         invalidateOnRefresh: true
     }
 });
 
-
-cl.to("#ocr", {
-    // top: "115.6vh",
-    //    left:"37%",
-    // x:"27vw",
-    // top: () => window.innerWidth <= 505 ? "1vh" : "115.6vh",
+threeMoveTl.to("#ocr", {
     top: () => window.innerWidth <= 505 ? "100vh" : "115.6vh",
     x: () => window.innerWidth <= 505 ? "50%" : "27vw",
     zIndex: () => window.innerWidth <= 505 ? "4" : "3",
-
     scale: 3.9,
-    // zIndex: 5,
     overwrite: "auto"
 });
 
-cl.to("#tcr", {
+threeMoveTl.to("#tcr", {
     top: () => window.innerWidth <= 505 ? "114%" : "134%",
-
-    // top: "134%",
-    // left: "34%",
     left: () => window.innerWidth <= 505 ? "24%" : "34%",
-
     scale: 2.7
+}, "<");
 
-}, "<")
-cl.to("#thcr", {
-    // top: "130%",
+threeMoveTl.to("#thcr", {
     top: () => window.innerWidth <= 505 ? "107%" : "134%",
     left: () => window.innerWidth <= 505 ? "28%" : "34%",
-
-    // left: "34%",
     scale: 2
-
-}, "<")
-
-// cl.to("#ocr", {
-//     top:"148%",
-//       left: "50%",
-//     xPercent: -50,
-
-// });
+}, "<");
 
 
+/* =========================================================================
+   SECTION "#ntxt": fade out oc / tc / thc labels
+   ========================================================================= */
 
-var ol = gsap.timeline({
+const ntxtFadeTl = gsap.timeline({
     scrollTrigger: {
         trigger: "#ntxt",
         scroller: "#main",
-        // markers:true,
         start: "top 27%",
         scrub: 1,
-        end: "top 25%",
-
+        end: "top 25%"
     }
 });
 
-ol.to("#oc", {
-    opacity: 0,
-    zIndex: -2
-
-})
-ol.to("#tc", {
-    opacity: 0,
-    zIndex: -2
+ntxtFadeTl.to("#oc", { opacity: 0, zIndex: -2 });
+ntxtFadeTl.to("#tc", { opacity: 0, zIndex: -2 }, "<");
+ntxtFadeTl.to("#thc", { opacity: 0, zIndex: -2 }, "<");
 
 
-}, "<")
-ol.to("#thc", {
-    opacity: 0,
-    zIndex: -2
+/* =========================================================================
+   SECTION "#poster": poster scale-in, thcr/tcr fade out, caption slide
+   ========================================================================= */
 
-
-}, "<")
-
-var pl = gsap.timeline({
+const posterScaleTl = gsap.timeline({
     scrollTrigger: {
         trigger: "#poster",
-        // markers:true,
         scroller: "#main",
         start: "top 80%",
         scrub: 1,
@@ -263,91 +201,64 @@ var pl = gsap.timeline({
     }
 });
 
-pl.to("#poster", {
-    scale: 1.2
-})
-
-// pl.to("#post", {
-//     scale: 1,
-//     marginTop: "52vh"
-// }, "< 0.3")
-pl.to("#post", {
+posterScaleTl.to("#poster", { scale: 1.2 });
+posterScaleTl.to("#post", {
     scale: 1,
     marginTop: () => window.innerWidth <= 505 ? "20vh" : "52vh"
 }, "<0.3");
 
-
-
-
-var ok = gsap.timeline({
+const posterFadeOutTl = gsap.timeline({
     scrollTrigger: {
         scroller: "#main",
         trigger: "#poster",
         start: "top 55%",
-        // markers:true,
         end: "top 50%",
         scrub: true
     }
 });
 
-
-ok.to("#thcr", {
-    opacity: 0
-})
-ok.to("#tcr", {
-    opacity: 0
-}, "<")
-
-
-
+posterFadeOutTl.to("#thcr", { opacity: 0 });
+posterFadeOutTl.to("#tcr", { opacity: 0 }, "<");
 
 gsap.to("#capt", {
     right: "-10%",
     scrollTrigger: {
         scroller: "#main",
         trigger: "#poster",
-        // markers:true,
         start: "top 75%",
         scrub: 3
     }
-})
+});
 
-var i = gsap.timeline({
+
+/* =========================================================================
+   SECTION "#sym": background tint change + horizontal slide + ocr tint
+   ========================================================================= */
+
+const symBgTl = gsap.timeline({
     scrollTrigger: {
         trigger: "#sym",
         scroller: "#main",
-        // markers:true,
         start: "top 30%",
-        scrub: 3,
-        // onLeaveBack: () => {
-        //     // Force reset to previous section color or default
-        //     gsap.to("#main", { backgroundColor: "#F5EFE1", duration: 0.3 });
-        // }
+        scrub: 3
     }
 });
-i.to("#front", {
-    backgroundColor: "#EBF4EA",
-})
-i.to("#main", {
-    backgroundColor: "#EBF4EA"
-}, "<")
 
+symBgTl.to("#front", { backgroundColor: "#EBF4EA" });
+symBgTl.to("#main", { backgroundColor: "#EBF4EA" }, "<");
 
-
-
-const handleScrollBackground = () => {
-    const mainEl = document.querySelector("#main");
-    const y = (mainEl && mainEl.style.transform)
-        ? locoScroll.scroll.instance.scroll.y
-        : (window.pageYOffset || document.documentElement.scrollTop || 0);
-    if (y < 100) {
+// If the user scrolls back up near the very top, force the background
+// back to the default (guards against the tint animations above getting stuck).
+function resetBackgroundNearTop() {
+    if (getScrollY() < 100) {
         gsap.to("#main", { backgroundColor: "#f6f6f6", duration: 0.3, overwrite: "auto" });
     }
-};
-locoScroll.on("scroll", handleScrollBackground);
-window.addEventListener("scroll", handleScrollBackground);
-
-
+}
+if (isSmoothActive()) {
+    locoScroll.on("scroll", resetBackgroundNearTop);
+} else {
+    window.addEventListener("scroll", resetBackgroundNearTop);
+}
 
 gsap.to("#sym", {
     left: "-50%",
@@ -355,14 +266,9 @@ gsap.to("#sym", {
         trigger: "#sym",
         scroller: "#main",
         scrub: 4,
-        start: "top 88%",
-        // markers:true
-
-
+        start: "top 88%"
     }
-})
-
-console.log(window.innerWidth, window.innerHeight);
+});
 
 gsap.to("#ocr", {
     backgroundColor: "#E5EEE4",
@@ -370,22 +276,17 @@ gsap.to("#ocr", {
         trigger: "#sym",
         scroller: "#main",
         scrub: 5,
-        // markers:true,
         start: "top 9%"
-
     }
-})
+});
 
 
-// yoyoyoyoyo
+/* =========================================================================
+   OC / THC HOVER: background-image reveal on #one / #two / #three
+   ========================================================================= */
 
+const revealTargets = document.querySelectorAll("#one, #two, #three");
 
-
-const targets = document.querySelectorAll("#one, #two, #three");
-const btnOC = document.querySelector("#oc");
-const btnTHC = document.querySelector("#thc");
-
-// --- Data: Kaunse button ke liye kaunsi images ---
 const imagesOC = [
     '59940 reimagined.webp',
     'boxroom/boxroom (1) reimagined (1).webp',
@@ -398,57 +299,47 @@ const imagesTHC = [
     'res1livin/living10.webp'
 ];
 
-// --- Common Animation Function ---
 function triggerReveal(isEnter, imageList = []) {
-    gsap.killTweensOf(targets);
+    gsap.killTweensOf(revealTargets);
 
     if (isEnter) {
-        // Hover Enter: Pehle teeno divs ki background-image badlo
-        targets.forEach((div, index) => {
-            // CSS Variable ke bajaye hum directly style.backgroundImage badal rahe hain
+        revealTargets.forEach((div, index) => {
             div.style.setProperty('--reveal-img', `url('${imageList[index]}')`);
-
-            // Ab CSS mein ::before ko batana padega ki wo ye variable use kare (Niche CSS check karein)
         });
 
-        // Ab GSAP se animate karo
-        gsap.to(targets, {
+        gsap.to(revealTargets, {
             "--opacity-before": 1,
             "--blur-after": "10px",
             "--blur-before": "0px",
             duration: 0.7,
-            // ease: "power2.out",
             overwrite: true
         });
     } else {
-        // Hover Leave
-        gsap.to(targets, {
+        gsap.to(revealTargets, {
             "--opacity-before": 0,
             "--blur-after": "0px",
             "--blur-before": "20px",
             duration: 0.5,
-            // ease: "power2.inOut",
             overwrite: true
         });
     }
 }
 
-// --- Event Listeners ---
-
-// Button #oc ke liye
-btnOC.addEventListener("mouseenter", () => triggerReveal(true, imagesOC));
-btnOC.addEventListener("mouseleave", () => triggerReveal(false));
-
-// Button #thc ke liye
-btnTHC.addEventListener("mouseenter", () => triggerReveal(true, imagesTHC));
-btnTHC.addEventListener("mouseleave", () => triggerReveal(false));
+oc.addEventListener("mouseenter", () => triggerReveal(true, imagesOC));
+oc.addEventListener("mouseleave", () => triggerReveal(false));
+thc.addEventListener("mouseenter", () => triggerReveal(true, imagesTHC));
+thc.addEventListener("mouseleave", () => triggerReveal(false));
 
 
+/* =========================================================================
+   ".frame" / ".frame2": p / roj / ect / s labels — fade-in, pin, and move
+   ========================================================================= */
 
+const frameLabels = ["#p", "#roj", "#ect", "#s"];
 
+gsap.set(frameLabels, { position: "relative", zIndex: 11 });
 
-
-var ek = gsap.timeline({
+gsap.timeline({
     scrollTrigger: {
         trigger: ".frame",
         scroller: "#main",
@@ -456,207 +347,138 @@ var ek = gsap.timeline({
         end: "top 38%",
         scrub: 1
     }
-});
+}).from(frameLabels, { opacity: 0, y: 10 });
 
-// Force zIndex and Position before animation starts
-gsap.set(["#p", "#roj", "#ect", "#s"], { position: "relative", zIndex: 11 });
-
-ek.from(["#p", "#roj", "#ect", "#s"], {
-    opacity: 0,
-    y: 10,
-    // ease: "power2.out"
-});
-
-
-
-const elements = ["#p", "#roj", "#ect", "#s"];
-
-
+// Pin each label individually (desktop/tablet only)
 ScrollTrigger.matchMedia({
     "(min-width: 769px)": function () {
-        elements.forEach((el) => {
+        frameLabels.forEach((el) => {
             gsap.to(el, {
                 scrollTrigger: {
                     trigger: ".frame2",
                     scroller: "#main",
                     start: "top 80%",
                     end: "top -186%",
-                    pin: el, // Har element individually pin hoga
+                    pin: el,
                     pinSpacing: false,
                     scrub: true,
-                    invalidateOnRefresh: true,
-                    // markers: true
+                    invalidateOnRefresh: true
                 }
             });
         });
     }
 });
 
-// 1. PINNING: Yeh sirf elements ko wahi rok ke rakhega
-
-// 2. ANIMATION (Left/Right/Top)
-// FIX 2: isMobile ab sirf ek baar page-load pe calculate nahi hota —
-// ScrollTrigger.matchMedia() use kar rahe hain taaki resize / orientation
-// change (jo mobile pe address-bar show-hide se bhi trigger hota hai)
-// pe ye automatically sahi timeline re-create kare.
+// Move the labels into position while pinned.
+// matchMedia auto-recreates this on resize/orientation change (e.g. mobile
+// address-bar show/hide), so it always uses the right desktop/mobile timeline.
 ScrollTrigger.matchMedia({
-    // Desktop & Tablet
     "(min-width: 769px)": function () {
-        let goo = gsap.timeline({
+        gsap.timeline({
             scrollTrigger: {
                 trigger: ".frame2",
                 scroller: "#main",
                 start: "top 75%",
                 end: "top -183%",
-                scrub: 3,
+                scrub: 3
             }
-        });
-
-        goo.to("#p", {
-            top: "23vh",
-            left: "21.5vw"
-        }, "<")
-            .to("#roj", {
-                top: "22vh",
-                left: "6.2vw"
-            }, "<")
-            .to("#s", {
-                top: "22vh",
-                right: "20vw",
-                left: "initial",
-            }, "<");
+        })
+            .to("#p", { top: "23vh", left: "21.5vw" }, "<")
+            .to("#roj", { top: "22vh", left: "6.2vw" }, "<")
+            .to("#s", { top: "22vh", right: "20vw", left: "initial" }, "<");
     },
-    // Mobile
     "(max-width: 768px)": function () {
-        let mobileGoo = gsap.timeline({
+        gsap.timeline({
             scrollTrigger: {
                 trigger: ".frame2",
                 scroller: "#main",
                 start: "top 75%",
                 end: "top -183%",
-                scrub: 3,
+                scrub: 3
             }
-        });
-
-        mobileGoo.to("#p", {
-            top: "280vh",
-            left: "13vw"
-        }, "<")
-            .to("#roj", {
-                top: "280vh",
-                left: "-0.8vw"
-            }, "<")
-            .to("#ect", {
-                top: "280vh",
-                left: "-2vw",
-            }, "<")
-            .to("#s", {
-                top: "280vh",
-                right: "14.8vw",
-                left: "initial",
-            }, "<");
+        })
+            .to("#p", { top: "280vh", left: "13vw" })
+            .to("#roj", { top: "280vh", left: "-0.8vw" }, "<")
+            .to("#ect", { top: "280vh", left: "-2vw" }, "<")
+            .to("#s", { top: "280vh", right: "14.8vw", left: "initial" }, "<");
     }
 });
 
-var boom = gsap.timeline({
+
+/* =========================================================================
+   ".frame5": gola shrink + label color change + ocr grow/tint
+   ========================================================================= */
+
+const golaShrinkTl = gsap.timeline({
     scrollTrigger: {
         trigger: ".frame5",
         scroller: "#main",
-        // markers:true,
         start: "top 20%",
-        // end: "top 0%",
         preventOverlaps: true,
-        //   fastScrollEnd: true,
-        scrub: 1,
-
+        scrub: 1
     }
 });
-boom.to("#gola", {
-    scale: 0.5,
-    top: "92vh",
 
+golaShrinkTl.to("#gola", { scale: 0.5, top: "92vh", backgroundColor: "#B8C7B3" });
+golaShrinkTl.to("#p h1", { color: "#3c3c3c" }, "<");
+golaShrinkTl.to("#roj h1", { color: "#3c3c3c" }, "<");
+golaShrinkTl.to("#ect h1", { color: "#3c3c3c" }, "<");
+golaShrinkTl.to("#s h1", { color: "#3c3c3c" }, "<");
 
-    //  overwrite: "auto",  
-    //   immediateRender: false,
-    backgroundColor: "#B8C7B3"
-
-})
-boom.to("#p h1", {
-    color: "#3c3c3c"
-
-}, "<")
-boom.to("#roj h1", {
-    color: "#3c3c3c"
-
-}, "<")
-boom.to("#ect h1", {
-    color: "#3c3c3c"
-
-}, "<")
-boom.to("#s h1", {
-    color: "#3c3c3c"
-
-}, "<")
-
-
-
-var bom = gsap.timeline({
+const ocrGrowTl = gsap.timeline({
     scrollTrigger: {
         trigger: ".frame5",
         scroller: "#main",
         start: "top 20%",
-        end: "top 0%", // End point define karne se scrub zyada accurate chalta hai
+        end: "top 0%", // explicit end keeps scrub accurate
         scrub: true,
-        preventOverlaps: true, // Animations ko aapas mein takrane se rokta hai
-        fastScrollEnd: true,   // Fast scroll pe animation ko turant end state pe pahunchata hai
-        // markers:true
+        preventOverlaps: true,
+        fastScrollEnd: true
     }
 });
 
-
-bom.to("#ocr", {
+ocrGrowTl.to("#ocr", {
     scale: 2,
-    // top: "290vh",
-   top: () => window.innerWidth <= 505 ? "290vh" : "310vh",
-
+    top: () => window.innerWidth <= 505 ? "290vh" : "310vh",
     backgroundColor: "#B8C7B3",
-    // ease: "power1.inOut",
-    // overwrite: "auto",      // Kisi bhi conflicting animation ko overwrite karega
-    immediateRender: false  // Initial frame par purana color force nahi hone dega
+    immediateRender: false // don't force old color on the initial frame
 });
 
+
+/* =========================================================================
+   "#ocr" PIN near "#sym" (mobile vs desktop behave differently)
+   ========================================================================= */
 
 ScrollTrigger.matchMedia({
-
-  "(max-width: 705px)": function () {
-       ScrollTrigger.create({
-        trigger: "#sym",
-        scroller: "#main",
-        start: "top 0%",
-        end: "top -155%",
-        pin: "#ocr",
-        pinType: "transform",
-    });
-
-  },
-
-  "(min-width: 706px)": function () {
-    gsap.to("#ocr", {
-      scrollTrigger: {
-        trigger: "#sym",
-        scroller: "#main",
-        start: "top 17%",
-        end: "top -258%",
-        pin:" #ocr",
-        scrub: true,
-        // markers: true
-      }
-    });
-  }
-
+    "(max-width: 705px)": function () {
+        ScrollTrigger.create({
+            trigger: "#sym",
+            scroller: "#main",
+            start: "top 0%",
+            end: "top -155%",
+            pin: "#ocr",
+            pinType: "transform",
+            scrub:true
+        });
+    },
+    "(min-width: 706px)": function () {
+        gsap.to("#ocr", {
+            scrollTrigger: {
+                trigger: "#sym",
+                scroller: "#main",
+                start: "top 17%",
+                end: "top -258%",
+                pin: "#ocr",
+                scrub: true
+            }
+        });
+    }
 });
- 
-// Sirf ye 1 ScrollTrigger add kar - baaki kuch mat change kar
+
+
+/* =========================================================================
+   "#view": "view all projects" fade-in + leaf decorations
+   ========================================================================= */
 
 gsap.to("#view", {
     opacity: 1,
@@ -665,11 +487,11 @@ gsap.to("#view", {
         trigger: "#view",
         scroller: "#main",
         scrub: 1,
-        // markers:true,
         start: "top 77%",
         end: "top 72%"
     }
-})
+});
+
 gsap.from("#projects", {
     opacity: 0,
     y: 10,
@@ -677,11 +499,10 @@ gsap.from("#projects", {
         trigger: "#view",
         scroller: "#main",
         scrub: true,
-        // markers:true,
         start: "top 90%",
         end: "top 80%"
     }
-})
+});
 
 gsap.from("#projects2", {
     opacity: 0,
@@ -690,188 +511,122 @@ gsap.from("#projects2", {
         trigger: "#view",
         scroller: "#main",
         scrub: true,
-        // markers:true,
         start: "top 90%",
         end: "top 80%"
     }
-})
-var leaf = gsap.timeline({
+});
+
+const leafFadeTl = gsap.timeline({
     scrollTrigger: {
         trigger: "#view",
         scroller: "#main",
         scrub: true,
-        // markers:true,
         start: "top 77%",
         end: "top 72%"
     }
 });
-leaf.from(".leaf-exact", {
-    opacity: 0,
 
-})
-leaf.from(".leaf-exact2", {
-    opacity: 0,
+leafFadeTl.from(".leaf-exact", { opacity: 0 });
+leafFadeTl.from(".leaf-exact2", { opacity: 0 }, "<");
+leafFadeTl.from("#leaft", { opacity: 0, y: 10 }, "<");
 
-}, "<")
-leaf.from("#leaft", {
-    opacity: 0,
-    y: 10
+const viewEl = document.querySelector("#view");
 
-}, "<")
+viewEl.addEventListener("mouseenter", () => {
+    gsap.timeline()
+        .to("#ocr", { scale: 2.2, overwrite: "auto" })
+        .to(".leaf-exact", { rotate: "18deg", top: "595vh", left: "36%" }, "<")
+        .to(".leaf-exact2", { rotate: "47deg", top: "600vh", left: "53%" }, "<");
+});
+
+viewEl.addEventListener("mouseleave", () => {
+    gsap.timeline()
+        .to("#ocr", { scale: 2, overwrite: "auto" })
+        .to(".leaf-exact", { rotate: "-10deg", top: "603vh", left: "37.3%" }, "<")
+        .to(".leaf-exact2", { rotate: "-17deg", top: "593vh", left: "51%" }, "<");
+});
+
+// Click "#view" navigates to the full projects page
+viewEl.addEventListener("click", () => {
+    window.location.href = "./view.html";
+});
 
 
+/* =========================================================================
+   "#leaft": background back to light + ocr repositioning
+   ========================================================================= */
 
-
-
-
-// var patta1 = document.querySelector(".leaf-exact");
-// var patta1 = document.querySelector(".leaf-exact2");
-// var gol = document.querySelector("#gola");
-var vw = document.querySelector("#view");
-vw.addEventListener("mouseenter", function () {
-    var pt = gsap.timeline();
-    pt.to("#ocr", {
-        scale: 2.2,
-        overwrite: "auto",
-    })
-    pt.to(".leaf-exact", {
-        rotate: "18deg",
-        top: "595vh",
-        left: "36%"
-    }, "<")
-    pt.to(".leaf-exact2", {
-        rotate: "47deg",
-        top: "600vh",
-        left: "53%"
-    }, "<")
-})
-
-vw.addEventListener("mouseleave", function () {
-    var ptt = gsap.timeline();
-    ptt.to("#ocr", {
-        scale: 2,
-        overwrite: "auto",
-    })
-    ptt.to(".leaf-exact", {
-        rotate: "-10deg",
-        top: "603vh",
-        left: "37.3%"
-    }, "<")
-    ptt.to(".leaf-exact2", {
-        rotate: "-17deg",
-        top: "593vh",
-        left: "51%"
-    }, "<")
-})
-
-var change = gsap.timeline({
+const backToLightTl = gsap.timeline({
     scrollTrigger: {
         trigger: "#leaft",
         scroller: "#main",
-        // markers:true,
         start: "top 27%",
         scrub: 3
     }
 });
-change.to("#front", {
-    backgroundColor: "#f6f6f6"
-})
-change.to("#main", {
-    backgroundColor: "#f6f6f6"
-}, "<")
 
+backToLightTl.to("#front", { backgroundColor: "#f6f6f6" });
+backToLightTl.to("#main", { backgroundColor: "#f6f6f6" }, "<");
 
-var ch = gsap.timeline({
-  scrollTrigger: {
-    trigger: "#poster",
-    start: "top 26%",
-    end: "bottom top",
-    scroller: "#main",
-    scrub: 1,
-
-    onLeave: () => {
-      gsap.set("#ocr", {
-        top: window.innerWidth <= 505 ? "150vh" : ""
-      });
+gsap.timeline({
+    scrollTrigger: {
+        trigger: "#poster",
+        start: "top 26%",
+        end: "bottom top",
+        scroller: "#main",
+        scrub: 1,
+        onLeave: () => {
+            gsap.set("#ocr", {
+                top: window.innerWidth <= 505 ? "150vh" : ""
+            });
+        }
     }
-  }
-});
-ch.to("#ocr", {
-    // top: "219.5vh",
-   top: () => window.innerWidth <= 505 ? "190vh" : "219.5vh",
-
-
+}).to("#ocr", {
+    top: () => window.innerWidth <= 505 ? "190vh" : "219.5vh",
     left: () => window.innerWidth <= 505 ? "50%" : "9vw",
-
-
     xPercent: () => window.innerWidth <= 505 ? -25 : -50,
-
-    ease: "none",
-
-})
+    ease: "none"
+});
 
 
-var xi = gsap.timeline({
+/* =========================================================================
+   "#x" / "#z": x/y/z image move + arrow rotate-in
+   ========================================================================= */
+
+const xyzMoveTl = gsap.timeline({
     scrollTrigger: {
         trigger: "#x",
         scroller: "#main",
-        // markers:true,
         scrub: 6,
         start: "top 90%"
-
     }
 });
 
-xi.to("#y", {
-    left: "20%",
+xyzMoveTl.to("#y", { left: "20%" });
+xyzMoveTl.to("#xi", { top: "650vh", scale: 1.05 }, "<");
+xyzMoveTl.to("#yi", { top: "662vh", scale: 1.05 }, "<");
+xyzMoveTl.to("#zi", { top: "655vh", scale: 1.05 }, "<");
 
-})
-
-
-
-xi.to("#xi", {
-    top: "650vh",
-    scale: 1.05
-}, "<")
-
-
-xi.to("#yi", {
-    top: "662vh",
-    scale: 1.05
-}, "<")
-xi.to("#zi", {
-    top: "655vh",
-    scale: 1.05
-}, "<")
-
-
-var arrow = gsap.timeline({
+const arrowTl = gsap.timeline({
     scrollTrigger: {
         trigger: "#z",
         scroller: "#main",
-        // markers:true,
         scrub: 4,
         start: "top 85%",
-        end: "top 55% "
+        end: "top 55%"
     }
 });
 
-
-arrow.to("#z i", {
-    rotate: "0deg"
-})
-arrow.to("#z h1", {
-    opacity: 1,
-    x: 10,
-}, "<0.2")
+arrowTl.to("#z i", { rotate: "0deg" });
+arrowTl.to("#z h1", { opacity: 1, x: 10 }, "<0.2");
 
 
+/* =========================================================================
+   "#behance": continuous spin + hover scale
+   ========================================================================= */
 
+const behance = document.querySelector("#behance");
 
-
-var behance = document.querySelector("#behance");
-
-// Pehle rotation start karo (CSS animation ki jagah)
 gsap.to("#behance", {
     rotation: 360,
     duration: 10,
@@ -879,79 +634,32 @@ gsap.to("#behance", {
     ease: "none"
 });
 
-// Ab Hover wala kaam smoothly chalega
-behance.addEventListener("mouseenter", function () {
-    gsap.to("#behance", {
-        scale: 1.2,
-        duration: 0.3
-    });
+behance.addEventListener("mouseenter", () => {
+    gsap.to("#behance", { scale: 1.2, duration: 0.3 });
 });
 
-behance.addEventListener("mouseleave", function () {
-    gsap.to("#behance", {
-        scale: 1,
-        duration: 0.3
-    });
-});
-
-gsap.config({
-    nullTargetWarn: false,
-    trialWarn: false,
-});
-
-ScrollTrigger.config({
-    limitCallbacks: true,
-    ignoreMobileResize: true,
-    syncInterval: 100
-});
-
-window.addEventListener("load", function () {
-    ScrollTrigger.refresh();
+behance.addEventListener("mouseleave", () => {
+    gsap.to("#behance", { scale: 1, duration: 0.3 });
 });
 
 
-// FIX 3: pehle ye har SCROLL event pe ScrollTrigger.refresh() chala raha tha —
-// jo mobile pe (kam powerful CPU/GPU) bohot heavy operation hai aur locomotive
-// ke momentum scroll ke saath milke jitter/lag create karta tha.
-// Ab refresh sirf window RESIZE (orientation change / address-bar toggle) pe
-// hoga, scroll pe nahi.
-let resizeTimeout;
-window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-        ScrollTrigger.refresh();
-    }, 200);
-});
+/* =========================================================================
+   Custom cursor follower
+   ========================================================================= */
 
+const cursor = document.querySelector("#cursor");
+const main = document.querySelector("#main");
+let cursorRevealed = false; // PERF FIX: only fade the cursor in once, not on every mousemove
 
-//linking view all project page..
-
-
-const link = document.querySelector("#view");
-
-
-link.addEventListener("click", function () {
-
-    window.location.href = "./view.html";
-});
-
-
-
-var cursor = document.querySelector("#cursor");
-var main = document.querySelector("#main");
-main.addEventListener("mousemove", function (dets) {
-    gsap.to(cursor, {
-        top: "0%"
-    })
+main.addEventListener("mousemove", (dets) => {
+    if (!cursorRevealed) {
+        gsap.to(cursor, { top: "0%" });
+        cursorRevealed = true;
+    }
     gsap.to(cursor, {
         x: dets.x,
         y: dets.y,
-        duration: 0.3,
-        duration: 0.8,
+        duration: 0.8, // PERF FIX: removed the earlier duplicate `duration: 0.3` key (dead code)
         ease: "power3.out"
-    })
-
-})         
-
-
-
+    });
+});
