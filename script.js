@@ -616,7 +616,9 @@ var bom = gsap.timeline({
 
 bom.to("#ocr", {
     scale: 2,
-    top: "290vh",
+    // top: "290vh",
+   top: () => window.innerWidth <= 505 ? "290vh" : "310vh",
+
     backgroundColor: "#B8C7B3",
     // ease: "power1.inOut",
     // overwrite: "auto",      // Kisi bhi conflicting animation ko overwrite karega
@@ -627,22 +629,15 @@ bom.to("#ocr", {
 ScrollTrigger.matchMedia({
 
   "(max-width: 705px)": function () {
- ScrollTrigger.create({
-  trigger: "#sym",
-  scroller: "#main",
-  start: "top 0%",
-  end: "top -155%",
+       ScrollTrigger.create({
+        trigger: "#sym",
+        scroller: "#main",
+        start: "top 0%",
+        end: "top -155%",
+        pin: "#ocr",
+        pinType: "transform",
+    });
 
-  onEnter() {
-    console.log(gsap.getProperty("#ocr", "top"));
-    console.log(gsap.getProperty("#ocr", "y"));
-    console.log(document.querySelector("#ocr").getBoundingClientRect());
-  },
-
-  pin: "#ocr",
-   pinType: "transform",
-//   markers: true
-});
   },
 
   "(min-width: 706px)": function () {
@@ -660,7 +655,7 @@ ScrollTrigger.matchMedia({
   }
 
 });
-
+ 
 // Sirf ye 1 ScrollTrigger add kar - baaki kuch mat change kar
 
 gsap.to("#view", {
@@ -957,3 +952,10 @@ main.addEventListener("mousemove", function (dets) {
     })
 
 })         
+
+
+
+mm.add("(max-width: 600px)", () => {
+
+
+});
